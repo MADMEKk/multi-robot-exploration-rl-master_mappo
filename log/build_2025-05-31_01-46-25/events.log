@@ -1,0 +1,130 @@
+[0.000000] (-) TimerEvent: {}
+[0.000201] (-) JobUnselected: {'identifier': 'start_rl_environment'}
+[0.000946] (start_reinforcement_learning) JobQueued: {'identifier': 'start_reinforcement_learning', 'dependencies': OrderedDict()}
+[0.001032] (start_reinforcement_learning) JobStarted: {'identifier': 'start_reinforcement_learning'}
+[0.101450] (-) TimerEvent: {}
+[0.210544] (-) TimerEvent: {}
+[0.313623] (-) TimerEvent: {}
+[0.416572] (-) TimerEvent: {}
+[0.517530] (-) TimerEvent: {}
+[0.621227] (-) TimerEvent: {}
+[0.724860] (-) TimerEvent: {}
+[0.828539] (-) TimerEvent: {}
+[0.933613] (-) TimerEvent: {}
+[1.042950] (-) TimerEvent: {}
+[1.144137] (-) TimerEvent: {}
+[1.247055] (-) TimerEvent: {}
+[1.350456] (-) TimerEvent: {}
+[1.454481] (-) TimerEvent: {}
+[1.561111] (-) TimerEvent: {}
+[1.665715] (-) TimerEvent: {}
+[1.771278] (-) TimerEvent: {}
+[1.876174] (-) TimerEvent: {}
+[1.980639] (-) TimerEvent: {}
+[2.087894] (-) TimerEvent: {}
+[2.193276] (-) TimerEvent: {}
+[2.300938] (-) TimerEvent: {}
+[2.408695] (-) TimerEvent: {}
+[2.512944] (-) TimerEvent: {}
+[2.620196] (-) TimerEvent: {}
+[2.721488] (-) TimerEvent: {}
+[2.824023] (-) TimerEvent: {}
+[2.926912] (-) TimerEvent: {}
+[3.031922] (-) TimerEvent: {}
+[3.132583] (-) TimerEvent: {}
+[3.236398] (-) TimerEvent: {}
+[3.340074] (-) TimerEvent: {}
+[3.441951] (-) TimerEvent: {}
+[3.543934] (-) TimerEvent: {}
+[3.645334] (-) TimerEvent: {}
+[3.746148] (-) TimerEvent: {}
+[3.847815] (-) TimerEvent: {}
+[3.951710] (-) TimerEvent: {}
+[4.054008] (-) TimerEvent: {}
+[4.158290] (-) TimerEvent: {}
+[4.261415] (-) TimerEvent: {}
+[4.362921] (-) TimerEvent: {}
+[4.467853] (-) TimerEvent: {}
+[4.571573] (-) TimerEvent: {}
+[4.675153] (-) TimerEvent: {}
+[4.780917] (-) TimerEvent: {}
+[4.883678] (-) TimerEvent: {}
+[4.984609] (-) TimerEvent: {}
+[5.085409] (-) TimerEvent: {}
+[5.189513] (-) TimerEvent: {}
+[5.293102] (-) TimerEvent: {}
+[5.397469] (-) TimerEvent: {}
+[5.500220] (-) TimerEvent: {}
+[5.607490] (-) TimerEvent: {}
+[5.713844] (-) TimerEvent: {}
+[5.816487] (-) TimerEvent: {}
+[5.917133] (-) TimerEvent: {}
+[6.018945] (-) TimerEvent: {}
+[6.119863] (-) TimerEvent: {}
+[6.220599] (-) TimerEvent: {}
+[6.331655] (-) TimerEvent: {}
+[6.435958] (-) TimerEvent: {}
+[6.540873] (-) TimerEvent: {}
+[6.642366] (-) TimerEvent: {}
+[6.750047] (-) TimerEvent: {}
+[6.855478] (-) TimerEvent: {}
+[6.896658] (start_reinforcement_learning) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/start_reinforcement_learning', 'build', '--build-base', '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/build', 'install', '--record', '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/aladine/memoir/multi-robot-exploration-rl-master/src/start_reinforcement_learning', 'env': {'GJS_DEBUG_TOPICS': 'JS ERROR;JS LOG', 'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'aladine', 'LC_TIME': 'ar_DZ.UTF-8', 'XDG_SESSION_TYPE': 'wayland', 'GIT_ASKPASS': '/usr/share/windsurf/resources/app/extensions/git/dist/askpass.sh', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib', 'HOME': '/home/aladine', 'CHROME_DESKTOP': 'windsurf.desktop', 'OLDPWD': '/home/aladine/memoir/multi-robot-exploration-rl-master', 'TERM_PROGRAM_VERSION': '1.99.1', 'DESKTOP_SESSION': 'ubuntu', 'GIO_LAUNCHED_DESKTOP_FILE': '/usr/share/applications/windsurf.desktop', 'ROS_PYTHON_VERSION': '3', 'GNOME_SHELL_SESSION_MODE': 'ubuntu', 'GTK_MODULES': 'gail:atk-bridge', 'PAGER': 'cat', 'VSCODE_GIT_ASKPASS_MAIN': '/usr/share/windsurf/resources/app/extensions/git/dist/askpass-main.js', 'LC_MONETARY': 'ar_DZ.UTF-8', 'VSCODE_GIT_ASKPASS_NODE': '/usr/share/windsurf/windsurf', 'MANAGERPID': '874', 'SYSTEMD_EXEC_PID': '1019', 'IM_CONFIG_CHECK_ENV': '1', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLORTERM': 'truecolor', 'GIO_LAUNCHED_DESKTOP_FILE_PID': '20553', 'IM_CONFIG_PHASE': '1', 'WAYLAND_DISPLAY': 'wayland-0', 'COLCON_PREFIX_PATH': '/home/aladine/memoir/multi-robot-exploration-rl-master/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'aladine', 'JOURNAL_STREAM': '8:7086', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'USERNAME': 'aladine', 'TERM': 'xterm-256color', 'GAZEBO_MODEL_PATH': '/home/aladine/.gazebo/models:/home/aladine/.gazebo/models:/usr/share/gazebo-11/models:/usr/share/gazebo-11/models', 'GNOME_DESKTOP_SESSION_ID': 'this-is-deprecated', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/aladine/.local/bin:/opt/ros/humble/bin:/home/aladine/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin', 'SESSION_MANAGER': 'local/random-rsmmme8v:@/tmp/.ICE-unix/991,unix/random-rsmmme8v:/tmp/.ICE-unix/991', 'INVOCATION_ID': '7442bfa2de394e18a78895b14be8264d', 'XDG_MENU_PREFIX': 'gnome-', 'LC_ADDRESS': 'ar_DZ.UTF-8', 'GNOME_SETUP_DISPLAY': ':1', 'XDG_RUNTIME_DIR': '/run/user/1000', 'GDK_BACKEND': 'x11', 'DISPLAY': ':0', 'LANG': 'en_US.UTF-8', 'XDG_CURRENT_DESKTOP': 'Unity', 'LC_TELEPHONE': 'ar_DZ.UTF-8', 'XMODIFIERS': '@im=ibus', 'XDG_SESSION_DESKTOP': 'ubuntu', 'XAUTHORITY': '/run/user/1000/.mutter-Xwaylandauth.Y96D72', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'VSCODE_GIT_IPC_HANDLE': '/run/user/1000/vscode-git-6d99e0a990.sock', 'TERM_PROGRAM': 'vscode', 'SSH_AGENT_LAUNCHER': 'gnome-keyring', 'SSH_AUTH_SOCK': '/run/user/1000/keyring/ssh', 'AMENT_PREFIX_PATH': '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment:/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning:/opt/ros/humble', 'ORIGINAL_XDG_CURRENT_DESKTOP': 'ubuntu:GNOME', 'SHELL': '/bin/bash', 'LC_NAME': 'ar_DZ.UTF-8', 'QT_ACCESSIBILITY': '1', 'GDMSESSION': 'ubuntu', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'IGN_GAZEBO_RESOURCE_PATH': ':/usr/share/gazebo-11/models:/usr/share/gazebo-11/models', 'LC_MEASUREMENT': 'ar_DZ.UTF-8', 'GJS_DEBUG_OUTPUT': 'stderr', 'LC_IDENTIFICATION': 'ar_DZ.UTF-8', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'QT_IM_MODULE': 'ibus', 'PWD': '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning', 'QT_QPA_PLATFORM': 'xcb', 'TURTLEBOT3_MODEL': 'burger', 'LC_ALL': 'en_US.UTF-8', 'XDG_CONFIG_DIRS': '/etc/xdg/xdg-ubuntu:/etc/xdg', 'XDG_DATA_DIRS': '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages:/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'ar_DZ.UTF-8', 'LC_PAPER': 'ar_DZ.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment'}, 'shell': False}
+[6.956301] (-) TimerEvent: {}
+[7.061821] (-) TimerEvent: {}
+[7.164084] (-) TimerEvent: {}
+[7.265131] (-) TimerEvent: {}
+[7.368212] (-) TimerEvent: {}
+[7.471593] (-) TimerEvent: {}
+[7.574467] (-) TimerEvent: {}
+[7.676448] (-) TimerEvent: {}
+[7.780010] (-) TimerEvent: {}
+[7.881619] (-) TimerEvent: {}
+[7.983401] (-) TimerEvent: {}
+[8.089572] (-) TimerEvent: {}
+[8.191199] (-) TimerEvent: {}
+[8.292284] (-) TimerEvent: {}
+[8.394686] (-) TimerEvent: {}
+[8.502141] (-) TimerEvent: {}
+[8.604579] (-) TimerEvent: {}
+[8.711773] (-) TimerEvent: {}
+[8.816992] (-) TimerEvent: {}
+[8.920905] (-) TimerEvent: {}
+[9.023135] (-) TimerEvent: {}
+[9.126815] (-) TimerEvent: {}
+[9.227735] (-) TimerEvent: {}
+[9.329065] (-) TimerEvent: {}
+[9.437958] (-) TimerEvent: {}
+[9.538609] (-) TimerEvent: {}
+[9.640823] (-) TimerEvent: {}
+[9.656723] (start_reinforcement_learning) StdoutLine: {'line': b'running egg_info\n'}
+[9.660827] (start_reinforcement_learning) StdoutLine: {'line': b'writing ../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/PKG-INFO\n'}
+[9.670871] (start_reinforcement_learning) StdoutLine: {'line': b'writing dependency_links to ../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/dependency_links.txt\n'}
+[9.671256] (start_reinforcement_learning) StdoutLine: {'line': b'writing entry points to ../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/entry_points.txt\n'}
+[9.672179] (start_reinforcement_learning) StdoutLine: {'line': b'writing requirements to ../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/requires.txt\n'}
+[9.672459] (start_reinforcement_learning) StdoutLine: {'line': b'writing top-level names to ../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/top_level.txt\n'}
+[9.688599] (start_reinforcement_learning) StdoutLine: {'line': b"reading manifest file '../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/SOURCES.txt'\n"}
+[9.701808] (start_reinforcement_learning) StdoutLine: {'line': b"writing manifest file '../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/SOURCES.txt'\n"}
+[9.702437] (start_reinforcement_learning) StdoutLine: {'line': b'running build\n'}
+[9.702640] (start_reinforcement_learning) StdoutLine: {'line': b'running build_py\n'}
+[9.704673] (start_reinforcement_learning) StdoutLine: {'line': b'copying start_reinforcement_learning/mappo_algorithm/buffer.py -> /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/build/lib/start_reinforcement_learning/mappo_algorithm\n'}
+[9.709444] (start_reinforcement_learning) StdoutLine: {'line': b'running install\n'}
+[9.715528] (start_reinforcement_learning) StdoutLine: {'line': b'running install_lib\n'}
+[9.719077] (start_reinforcement_learning) StdoutLine: {'line': b'copying /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/build/lib/start_reinforcement_learning/mappo_algorithm/buffer.py -> /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages/start_reinforcement_learning/mappo_algorithm\n'}
+[9.722133] (start_reinforcement_learning) StdoutLine: {'line': b'byte-compiling /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages/start_reinforcement_learning/mappo_algorithm/buffer.py to buffer.cpython-310.pyc\n'}
+[9.736318] (start_reinforcement_learning) StdoutLine: {'line': b'running install_data\n'}
+[9.736678] (start_reinforcement_learning) StdoutLine: {'line': b'running install_egg_info\n'}
+[9.741196] (-) TimerEvent: {}
+[9.747629] (start_reinforcement_learning) StdoutLine: {'line': b"removing '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages/start_reinforcement_learning-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[9.755225] (start_reinforcement_learning) StdoutLine: {'line': b'Copying ../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info to /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages/start_reinforcement_learning-0.0.0-py3.10.egg-info\n'}
+[9.767366] (start_reinforcement_learning) StdoutLine: {'line': b'running install_scripts\n'}
+[9.841382] (-) TimerEvent: {}
+[9.914597] (start_reinforcement_learning) StdoutLine: {'line': b'Installing run_maddpg script to /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/start_reinforcement_learning\n'}
+[9.923566] (start_reinforcement_learning) StdoutLine: {'line': b'Installing run_mappo script to /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/start_reinforcement_learning\n'}
+[9.926413] (start_reinforcement_learning) StdoutLine: {'line': b'Installing run_mappo_evaluate script to /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/start_reinforcement_learning\n'}
+[9.926820] (start_reinforcement_learning) StdoutLine: {'line': b"writing list of installed files to '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/install.log'\n"}
+[9.942046] (-) TimerEvent: {}
+[10.043481] (-) TimerEvent: {}
+[10.106149] (start_reinforcement_learning) CommandEnded: {'returncode': 0}
+[10.146910] (-) TimerEvent: {}
+[10.209122] (start_reinforcement_learning) JobEnded: {'identifier': 'start_reinforcement_learning', 'rc': 0}
+[10.211959] (-) EventReactorShutdown: {}

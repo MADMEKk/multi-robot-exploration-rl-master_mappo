@@ -1,0 +1,17 @@
+#env
+ros2 launch start_rl_environment main.launch.py map_number:=1 robot_number:=2
+
+#training with MAPPO (default)
+ros2 launch start_reinforcement_learning start_learning.launch.py map_number:=1 robot_number:=2 algorithm:=mappo
+
+#training with MADDPG
+ros2 launch start_reinforcement_learning start_learning.launch.py map_number:=1 robot_number:=2 algorithm:=maddpg
+
+#testing with MAPPO (default)
+ros2 launch start_reinforcement_learning evaluate.launch.py map_number:=1 robot_number:=2 algorithm:=mappo
+
+#testing with MADDPG
+ros2 launch start_reinforcement_learning evaluate.launch.py map_number:=1 robot_number:=2 algorithm:=maddpg
+
+#algorithm comparison
+ros2 launch start_reinforcement_learning compare_algorithms.launch.py map_number:=1 robot_number:=2 n_episodes:=100

@@ -1,0 +1,47 @@
+[2.321s] Invoking command in '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_rl_environment': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_rl_environment -- -j4 -l4
+[2.735s] Invoked command in '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_rl_environment' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_rl_environment -- -j4 -l4
+[2.839s] Invoking command in '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_rl_environment': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_rl_environment
+[2.885s] -- Install configuration: ""
+[2.886s] -- Execute custom install script
+[2.886s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/description/gazebo_control.xacro
+[2.887s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/description/inertial_macros.xacro
+[2.889s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/description/lidar.xacro
+[2.892s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/description/robot.urdf.xacro
+[2.892s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/description/robot_core.xacro
+[2.893s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/launch/main.launch.py
+[2.896s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/launch/spawn_robots.launch.py
+[2.896s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/launch/start_robots.launch.py
+[2.896s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/launch/start_world.launch.py
+[2.897s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/worlds/map1.world
+[2.900s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/worlds/map2.world
+[2.900s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/cylinder_g/model.config
+[2.900s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/cylinder_g/model.sdf
+[2.901s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/goal_box/model.config
+[2.901s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/goal_box/model.sdf
+[2.901s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/grey_wall/materials/scripts/grey_wall.material
+[2.901s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/grey_wall/materials/textures/grey_wall.png
+[2.901s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/grey_wall/model-1_3.sdf
+[2.915s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/grey_wall/model-1_4.sdf
+[2.916s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/grey_wall/model.config
+[2.924s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/grey_wall/model.sdf
+[2.925s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/ground_plane/model-1_2.sdf
+[2.925s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/ground_plane/model-1_3.sdf
+[2.925s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/ground_plane/model-1_4.sdf
+[2.925s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/ground_plane/model.config
+[2.926s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/models/ground_plane/model.sdf
+[2.926s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/ament_index/resource_index/package_run_dependencies/start_rl_environment
+[2.926s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/ament_index/resource_index/parent_prefix_path/start_rl_environment
+[2.926s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/environment/ament_prefix_path.sh
+[2.927s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/environment/ament_prefix_path.dsv
+[2.927s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/environment/path.sh
+[2.937s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/environment/path.dsv
+[2.937s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/local_setup.bash
+[2.937s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/local_setup.sh
+[2.938s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/local_setup.zsh
+[2.938s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/local_setup.dsv
+[2.938s] -- Symlinking: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/package.dsv
+[2.975s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/ament_index/resource_index/packages/start_rl_environment
+[2.976s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/cmake/start_rl_environmentConfig.cmake
+[2.979s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/cmake/start_rl_environmentConfig-version.cmake
+[2.980s] -- Up-to-date symlink: /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_rl_environment/share/start_rl_environment/package.xml
+[2.987s] Invoked command in '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_rl_environment' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_rl_environment
