@@ -15,16 +15,30 @@ class MADDPG:
         self.n_actions = n_actions
         self.logger = node_logger
         self.started_learning = False
-        chkpt_dir += scenario 
+        # Path now includes map and robot numbers from maddpg_main.py
         for agent_idx in range(self.n_agents):
             self.agents.append(Agent(actor_dims[agent_idx], critic_dims,  
                             n_actions, n_agents, agent_idx, alpha=alpha, beta=beta,
                             chkpt_dir=chkpt_dir, fc1=fc1, fc2=fc2,gamma=gamma,tau=tau))
 
     def save_checkpoint(self):
-        print('... saving checkpoint ...')
-        for agent in self.agents:
-            agent.save_models()
+        if self.logger:
+            self.logger.get_logger().info('... saving checkpoint to dynamic path based on map and robot count ...')
+        else:
+            print('... saving checkpoint to dynamic path based on map and robot count ...')
+        
+        try:
+            for agent in self.agents:
+                agent.save_models()
+            if self.logger:
+                self.logger.get_logger().info('Successfully saved all agent models')
+            else:
+                print('Successfully saved all agent models')
+        except Exception as e:
+            if self.logger:
+                self.logger.get_logger().error(f'Error saving models: {str(e)}')
+            else:
+                print(f'Error saving models: {str(e)}')
 
     def load_checkpoint(self):
         print('... loading checkpoint ...')

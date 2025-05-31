@@ -22,13 +22,29 @@ def generate_launch_description():
         default_value='3',
         description='Number of robots to be launched'
     )
+    
+    # Add headless mode parameter
+    headless_arg = DeclareLaunchArgument(
+        'headless',
+        default_value='false',
+        description='Run Gazebo in headless mode (no GUI)'
+    )
+    
+    # Add fast training mode parameter
+    fast_training_arg = DeclareLaunchArgument(
+        'fast_training',
+        default_value='false',
+        description='Run simulation with optimized physics for faster training'
+    )
 
     # This Launch file handles the simulation of the environment (Gazebo)
     start_world = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(package_name), 'launch', 'start_world.launch.py')),
         launch_arguments={
             'map_number': LaunchConfiguration('map_number'),
-            'robot_number': LaunchConfiguration('robot_number')
+            'robot_number': LaunchConfiguration('robot_number'),
+            'headless': LaunchConfiguration('headless'),
+            'fast_training': LaunchConfiguration('fast_training')
         }.items()
     )
 
@@ -44,6 +60,8 @@ def generate_launch_description():
     return LaunchDescription([
         map_number_arg,
         robot_number_arg,
+        headless_arg,
+        fast_training_arg,
         start_world,
         start_robots
     ])

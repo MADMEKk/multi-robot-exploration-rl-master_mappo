@@ -34,7 +34,9 @@ def generate_launch_description():
                                    '-x',x_pos,
                                    '-y',y_pos,
                                    '-z',z_pos,
-                                   '-Y',turn_around,],
+                                   '-Y',turn_around,
+                                   '-R', '0',
+                                   '-P', '0'],
                         output='screen')
     
     # Run the spawner node from the gazebo_ros package. The entity name doesn't really matter if you only have a single robot.

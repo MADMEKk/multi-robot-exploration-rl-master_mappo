@@ -23,6 +23,7 @@ class MAPPOEvaluateNode(Node):
         # Access the parameters passed from the launch file
         map_number = self.declare_parameter('map_number', 1).get_parameter_value().integer_value
         robot_number = self.declare_parameter('robot_number', 3).get_parameter_value().integer_value
+        model_episode = self.declare_parameter('model_episode', 0).get_parameter_value().integer_value
 
         self.get_logger().info(f"Evaluation Mode - Map number: {map_number}")
         self.get_logger().info(f"Evaluation Mode - Robot number: {robot_number}")
@@ -37,8 +38,29 @@ class MAPPOEvaluateNode(Node):
         # Action space is discrete, one of 9 actions (3 linear x 3 angular)
         n_actions = 9  # 3 linear velocity options x 3 angular velocity options
 
-        chkpt_dir_var = os.path.join(get_package_share_directory('start_reinforcement_learning'),
-                                    'start_reinforcement_learning', 'deep_learning_weights', 'mappo')
+        # Use direct path instead of get_package_share_directory which might fail
+        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        
+        # Base checkpoint directory
+        chkpt_dir_var = os.path.join(base_path, 'start_reinforcement_learning', 'deep_learning_weights', 'mappo')
+        
+        # If using src directory instead of build
+        src_chkpt_dir = os.path.join('/home/aladine/memoir/multi-robot-exploration-rl-master/src', 
+                                    'start_reinforcement_learning', 'start_reinforcement_learning', 
+                                    'deep_learning_weights', 'mappo')
+        
+        # Check if src directory exists and use it if it does
+        if os.path.exists(src_chkpt_dir):
+            chkpt_dir_var = src_chkpt_dir
+            
+        # Add map and robot numbers to path
+        chkpt_dir_var = os.path.join(chkpt_dir_var, f'map{map_number}_robots{robot_number}')
+        
+        # If model_episode is specified, use the periodic save directory
+        if model_episode > 0:
+            chkpt_dir_var = os.path.join(os.path.dirname(chkpt_dir_var), f'periodic_ep{model_episode}')
+            
+        self.get_logger().info(f"Loading model from: {chkpt_dir_var}")
         
         # Initialize main algorithm
         mappo_agents = MAPPO(actor_dims, critic_dims, n_agents, n_actions, 
@@ -110,6 +132,8 @@ def main(args=None):
     
     map_number = int(os.getenv('map_number', '1'))
     robot_number = int(os.getenv('robot_number', '3'))
+    model_episode = int(os.getenv('model_episode', '0'))  # 0 means use best model, otherwise use periodic save
+    
     node = MAPPOEvaluateNode(map_number, robot_number)
     node.destroy_node()
     rclpy.shutdown()

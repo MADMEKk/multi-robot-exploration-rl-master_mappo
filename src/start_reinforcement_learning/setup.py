@@ -28,6 +28,7 @@ setup(
             'run_maddpg = start_reinforcement_learning.maddpg_main:main',
             'run_mappo = start_reinforcement_learning.mappo_main:main',
             'run_mappo_evaluate = start_reinforcement_learning.mappo_evaluate:main',
+            'run_maddpg_evaluate = start_reinforcement_learning.maddpg_evaluate:main',
             'run_algorithm_comparison = start_reinforcement_learning.run_algorithm_comparison:main',
         ],
     },

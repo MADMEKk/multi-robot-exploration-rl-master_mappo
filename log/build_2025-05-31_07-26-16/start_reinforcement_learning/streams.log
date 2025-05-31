@@ -1,0 +1,21 @@
+[1.462s] Invoking command in '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning': PYTHONPATH=/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/build --no-deps symlink_data
+[2.072s] running develop
+[2.356s] running egg_info
+[2.356s] writing start_reinforcement_learning.egg-info/PKG-INFO
+[2.357s] writing dependency_links to start_reinforcement_learning.egg-info/dependency_links.txt
+[2.357s] writing entry points to start_reinforcement_learning.egg-info/entry_points.txt
+[2.357s] writing requirements to start_reinforcement_learning.egg-info/requires.txt
+[2.357s] writing top-level names to start_reinforcement_learning.egg-info/top_level.txt
+[2.361s] reading manifest file 'start_reinforcement_learning.egg-info/SOURCES.txt'
+[2.363s] writing manifest file 'start_reinforcement_learning.egg-info/SOURCES.txt'
+[2.365s] running build_ext
+[2.365s] Creating /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages/start-reinforcement-learning.egg-link (link to .)
+[2.367s] Installing run_algorithm_comparison script to /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/start_reinforcement_learning
+[2.367s] Installing run_maddpg script to /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/start_reinforcement_learning
+[2.367s] Installing run_maddpg_evaluate script to /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/start_reinforcement_learning
+[2.367s] Installing run_mappo script to /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/start_reinforcement_learning
+[2.368s] Installing run_mappo_evaluate script to /home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/start_reinforcement_learning
+[2.368s] 
+[2.368s] Installed /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning
+[2.368s] running symlink_data
+[2.440s] Invoked command in '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning' returned '0': PYTHONPATH=/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/build --no-deps symlink_data

@@ -23,7 +23,7 @@ class MAPPO:
         self.value_coef = value_coef
         self.update_epochs = 4  # Number of epochs to update policy per batch
         
-        chkpt_dir += scenario 
+        # Path now includes map and robot numbers from mappo_main.py
         
         for agent_idx in range(self.n_agents):
             self.agents.append(Agent(actor_dims[agent_idx], critic_dims,  
@@ -34,9 +34,22 @@ class MAPPO:
 
     def save_checkpoint(self):
         if self.logger:
-            self.logger.get_logger().info('... saving checkpoint ...')
-        for agent in self.agents:
-            agent.save_models()
+            self.logger.get_logger().info('... saving checkpoint to dynamic path based on map and robot count ...')
+        else:
+            print('... saving checkpoint to dynamic path based on map and robot count ...')
+        
+        try:
+            for agent in self.agents:
+                agent.save_models()
+            if self.logger:
+                self.logger.get_logger().info('Successfully saved all agent models')
+            else:
+                print('Successfully saved all agent models')
+        except Exception as e:
+            if self.logger:
+                self.logger.get_logger().error(f'Error saving models: {str(e)}')
+            else:
+                print(f'Error saving models: {str(e)}')
 
     def load_checkpoint(self):
         if self.logger:
@@ -107,7 +120,26 @@ class MAPPO:
             individual_states = batch_data['individual_obs'][agent_idx]
             global_states = batch_data['states']
             actions = batch_data['actions'][:, agent_idx]
-            old_log_probs = batch_data['log_probs'][:, agent_idx]
+            
+            # Carefully extract log probabilities
+            log_probs = batch_data['log_probs']
+            try:
+                if log_probs.ndim == 1:
+                    old_log_probs = log_probs  # No indexing needed, single agent
+                else:
+                    old_log_probs = log_probs[:, agent_idx]
+                    
+                # Ensure log_probs are in a valid format
+                if isinstance(old_log_probs, np.ndarray) and old_log_probs.dtype == np.dtype('O'):
+                    # Convert object array to float array
+                    old_log_probs = np.array([float(x) if x is not None else 0.0 
+                                             for x in old_log_probs], dtype=np.float32)
+            except Exception as e:
+                if self.logger:
+                    self.logger.get_logger().warning(f"Error processing log_probs: {e}")
+                # Create a default array of zeros as fallback
+                old_log_probs = np.zeros(len(individual_states), dtype=np.float32)
+                
             advantages = batch_data['advantages'][:, agent_idx]
             returns = batch_data['returns'][:, agent_idx]
             

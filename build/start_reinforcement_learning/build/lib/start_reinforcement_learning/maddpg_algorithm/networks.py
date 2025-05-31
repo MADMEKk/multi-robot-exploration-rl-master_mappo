@@ -30,6 +30,10 @@ class CriticNetwork(nn.Module):
         return q
 
     def save_checkpoint(self):
+        # Create directory if it doesn't exist
+        directory = os.path.dirname(self.chkpt_file)
+        if not os.path.exists(directory):
+            os.makedirs(directory, exist_ok=True)
         T.save(self.state_dict(), self.chkpt_file)
 
     def load_checkpoint(self):
@@ -75,6 +79,10 @@ class ActorNetwork(nn.Module):
         return pi
     
     def save_checkpoint(self):
+        # Create directory if it doesn't exist
+        directory = os.path.dirname(self.chkpt_file)
+        if not os.path.exists(directory):
+            os.makedirs(directory, exist_ok=True)
         T.save(self.state_dict(), self.chkpt_file)
 
     def load_checkpoint(self):

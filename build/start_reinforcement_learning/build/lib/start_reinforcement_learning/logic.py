@@ -141,15 +141,48 @@ class Env():
     
     # Get basic rewards --- REWARD FUCNTION, goal and collision rewards are class attributes
     def getRewards(self):
-        # TODO this create empty array method and append is slow, fix it. 
-        robotRewards = []
-        startingReward = 0
+        robotRewards = np.zeros(self.number_of_robots)
+        
         for i in range(self.number_of_robots):
-            currentReward = startingReward
-            # Reward for moving a little fast, 
+            # Base reward starts at a small negative value to encourage faster goal completion
+            currentReward = -0.1
+            
+            # Calculate distance to goal
+            current_distance = math.hypot(
+                self.current_goal_location[0] - self.current_pose_x[i], 
+                self.current_goal_location[1] - self.current_pose_y[i])
+            
+            # If we have a previous distance, reward getting closer to goal
+            if hasattr(self, 'previous_distances') and len(self.previous_distances) > i:
+                previous_distance = self.previous_distances[i]
+                # Reward for moving toward goal, penalize for moving away
+                distance_delta = previous_distance - current_distance
+                currentReward += distance_delta * 5.0  # Scale factor to make this reward significant
+            
+            # Penalize being too close to obstacles (using minimum lidar reading)
+            if hasattr(self, 'current_min_scan') and len(self.current_min_scan) > i:
+                min_scan = self.current_min_scan[i]
+                if min_scan < 0.5:  # If obstacle is close
+                    obstacle_penalty = ((0.5 - min_scan) * 2.0) ** 2  # Quadratic penalty that increases as robot gets closer
+                    currentReward -= obstacle_penalty
+            
+            # Reward for appropriate velocity - we want smooth, purposeful movement
             if self.current_linear_velocity[i] < 0.10:
-                currentReward += -0.5
-            robotRewards.append(currentReward)
+                currentReward -= 0.5  # Penalize very slow movement
+            elif self.current_linear_velocity[i] > 0.5:
+                currentReward += 0.2  # Reward faster movement when appropriate
+                
+            # Penalize excessive rotation (spinning in place)
+            if abs(self.current_angular_velocity[i]) > 0.3:
+                currentReward -= 0.2 * abs(self.current_angular_velocity[i])
+                
+            robotRewards[i] = currentReward
+        
+        # Store current distances for next step comparison
+        self.previous_distances = [math.hypot(
+            self.current_goal_location[0] - self.current_pose_x[i], 
+            self.current_goal_location[1] - self.current_pose_y[i]) for i in range(self.number_of_robots)]
+        
         return robotRewards                
     
     # Converts list of arrays to dictionary for MADDPG Algorithm
@@ -207,6 +240,8 @@ class Env():
 
         # Read lidar scans from all robots
         robot_scans = []
+        self.current_min_scan = []  # Track minimum scan distances for reward function
+        
         for i in range(self.number_of_robots):
             data = None
             scan_data = self.scan_subscriber_list[i]
@@ -217,6 +252,10 @@ class Env():
             
             scan_range = self.resize_lidar(data)
             robot_scans.append(scan_range)
+            
+            # Store minimum scan distance (excluding velocity values at the end)
+            min_scan = np.min(scan_range[:36]) if len(scan_range) >= 36 else 0.5
+            self.current_min_scan.append(min_scan)
 
         # Return truncated true if max steps reached
         if self.step_counter + 1 > self.MAX_STEPS:

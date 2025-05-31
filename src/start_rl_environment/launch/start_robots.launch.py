@@ -18,23 +18,23 @@ sl.declare_arg('map_number', default_value=1)
 sl.declare_arg('robot_number', default_value=3)
 # Function which generates a list of x robots with inital poses
 def gen_robot_list(number_of_robots, map_number):
-    # Initial robot locations and rotations [x,y,yaw] for map 1
-    map1_position1 = [-0.6,-10,(math.pi)/4]
-    map1_position2 = [1.8,-10,(3*math.pi/4)]
-    map1_position3 = [1.8,-1,(5*math.pi)/4]
-    map1_position4 = [-0.6,-1,(-math.pi)/4]
-    map1_position5 = [-0.94,-5.1,0]
-    map1_position6 = [1.94,-5.1, -math.pi]
-    map1_position7 = [0.47, -3.02, (-math.pi)/2]
+    # Initial robot locations and rotations [x,y,yaw] for map 1 - safe positions
+    map1_position1 = [0.5,-9.0,0]
+    map1_position2 = [0.5,-8.0,0]
+    map1_position3 = [0.5,-7.0,0]
+    map1_position4 = [0.5,-6.0,0]
+    map1_position5 = [0.5,-5.0,0]
+    map1_position6 = [0.5,-4.0,0]
+    map1_position7 = [0.5,-3.0,0]
     
-    # Initial robot locations and rotations [x,y,yaw] for map 2
-    map2_position1 = [9.2,-3,(3*math.pi)/4]
-    map2_position2 = [9.2,-1.07,(-3*math.pi/4)]
-    map2_position3 = [-0.55,-1.2,(-math.pi)/4]
-    map2_position4 = [-0.8,-10.2,(math.pi)/4]
-    map2_position5 = [-0.93,-5.1,0]
-    map2_position6 = [1.93,-5.1, math.pi]
-    map2_position7 = [1.53,-9.9,(3*math.pi)/4]
+    # Initial robot locations and rotations [x,y,yaw] for map 2 - safe positions
+    map2_position1 = [0.5,-9.0,0]
+    map2_position2 = [0.5,-8.0,0]
+    map2_position3 = [0.5,-7.0,0]
+    map2_position4 = [0.5,-6.0,0]
+    map2_position5 = [0.5,-5.0,0]
+    map2_position6 = [0.5,-4.0,0]
+    map2_position7 = [0.5,-3.0,0]
     
     # map 1 array of random locations for robots
     map1_random_robot_locations = [map1_position1,map1_position2,map1_position3,
@@ -74,7 +74,7 @@ def gen_robot_list(number_of_robots, map_number):
         robot_name = "my_bot"+str(i)
         robot_name_space = "my_bot_ns" + str(i)
         robots.append({'name': robot_name, 'ns': robot_name_space, 'x_pose': selected_robot_locations[i][0],
-                       'y_pose': selected_robot_locations[i][1], 'z_pose': 0.3,
+                        'y_pose': selected_robot_locations[i][1], 'z_pose': 0.05,
                        'rotation': selected_robot_locations[i][2]})
     return robots 
 
@@ -99,7 +99,7 @@ def launch_setup():
     for robot in robots:
         sl.include(package_name,'spawn_robots.launch.py','launch/',
                    launch_arguments={
-                                  'robot_urdf': xacro_file,
+                                   'robot_urdf': xacro_file,
                                   'x': TextSubstitution(text=str(robot['x_pose'])),
                                   'y': TextSubstitution(text=str(robot['y_pose'])),
                                   'z': TextSubstitution(text=str(robot['z_pose'])),

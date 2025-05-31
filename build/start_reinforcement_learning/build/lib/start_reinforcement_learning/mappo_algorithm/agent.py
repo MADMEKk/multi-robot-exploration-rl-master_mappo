@@ -76,7 +76,22 @@ class Agent:
         individual_states = T.tensor(individual_states, dtype=T.float, device=self.actor.device)
         global_states = T.tensor(global_states, dtype=T.float, device=self.critic.device)
         actions = T.tensor(actions, dtype=T.long, device=self.actor.device)
-        old_log_probs = T.tensor(old_log_probs, dtype=T.float, device=self.actor.device)
+        
+        # Handle old_log_probs carefully to avoid numpy.object_ error
+        try:
+            # First ensure old_log_probs is a numeric numpy array
+            if isinstance(old_log_probs, list):
+                old_log_probs = np.array(old_log_probs, dtype=np.float32)
+            elif isinstance(old_log_probs, np.ndarray) and old_log_probs.dtype == np.dtype('O'):
+                # Convert object array to float array
+                old_log_probs = np.array([float(x) if x is not None else 0.0 for x in old_log_probs], dtype=np.float32)
+            
+            old_log_probs = T.tensor(old_log_probs, dtype=T.float, device=self.actor.device)
+        except Exception as e:
+            # Fallback: If conversion fails, create a tensor of zeros
+            print(f"Warning: Could not convert log_probs to tensor: {e}")
+            old_log_probs = T.zeros(len(individual_states), dtype=T.float, device=self.actor.device)
+        
         advantages = T.tensor(advantages, dtype=T.float, device=self.actor.device)
         returns = T.tensor(returns, dtype=T.float, device=self.critic.device)
         

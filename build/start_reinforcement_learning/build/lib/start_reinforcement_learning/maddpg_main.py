@@ -42,8 +42,11 @@ class MADDPGNode(Node):
         # Action space is discrete, one of 4 actions,  look in env
         n_actions = env.action_space()
 
-        chkpt_dir_var = os.path.join(get_package_share_directory('start_reinforcement_learning'),
-                                    'start_reinforcement_learning','deep_learning_weights','maddpg')
+        # Use direct path instead of get_package_share_directory which might fail
+        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        # Include map number and robot number in the checkpoint directory path
+        chkpt_dir_var = os.path.join(base_path, 'start_reinforcement_learning', 'deep_learning_weights', 'maddpg', f'map{map_number}_robots{robot_number}')
+        self.get_logger().info(f"Checkpoint directory: {chkpt_dir_var}")
         
         # Initialize main algorithm
         maddpg_agents = MADDPG(actor_dims, critic_dims, n_agents, n_actions, 
@@ -113,9 +116,33 @@ class MADDPGNode(Node):
             # Average the last 100 recent scores
             avg_score = np.mean(score_history[-100:])
             if not evaluate:
+                # Save when score improves
                 if avg_score > best_score:
+                    self.get_logger().info(f'New best score: {avg_score:.1f}! Saving checkpoint...')
                     maddpg_agents.save_checkpoint()
                     best_score = avg_score
+                
+                # Also save periodically every 50 episodes
+                if i % 50 == 0 and i > 0:
+                    self.get_logger().info(f'Periodic save at episode {i}...')
+                    # Save to a different directory to avoid overwriting best models
+                    periodic_chkpt_dir = os.path.join(os.path.dirname(chkpt_dir_var), f'periodic_ep{i}')
+                    # Temporarily change the checkpoint directory
+                    original_chkpt_dir = maddpg_agents.agents[0].actor.chkpt_file
+                    for agent in maddpg_agents.agents:
+                        agent.actor.chkpt_file = os.path.join(periodic_chkpt_dir, os.path.basename(agent.actor.chkpt_file))
+                        agent.critic.chkpt_file = os.path.join(periodic_chkpt_dir, os.path.basename(agent.critic.chkpt_file))
+                        agent.target_actor.chkpt_file = os.path.join(periodic_chkpt_dir, os.path.basename(agent.target_actor.chkpt_file))
+                        agent.target_critic.chkpt_file = os.path.join(periodic_chkpt_dir, os.path.basename(agent.target_critic.chkpt_file))
+                    
+                    maddpg_agents.save_checkpoint()
+                    
+                    # Restore original checkpoint directory
+                    for agent_idx, agent in enumerate(maddpg_agents.agents):
+                        agent.actor.chkpt_file = original_chkpt_dir.replace('agent_0', f'agent_{agent_idx}')
+                        agent.critic.chkpt_file = original_chkpt_dir.replace('agent_0_actor', f'agent_{agent_idx}_critic')
+                        agent.target_actor.chkpt_file = original_chkpt_dir.replace('agent_0_actor', f'agent_{agent_idx}_target_actor')
+                        agent.target_critic.chkpt_file = original_chkpt_dir.replace('agent_0_actor', f'agent_{agent_idx}_target_critic')
             if i % PRINT_INTERVAL == 0 and i > 0:
                 self.get_logger().info('Episode: {}, Average score: {:.1f}'.format(i, avg_score))
 

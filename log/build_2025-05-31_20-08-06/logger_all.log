@@ -1,0 +1,153 @@
+[0.246s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--packages-select', 'start_reinforcement_learning']
+[0.246s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=['start_reinforcement_learning'], packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7ec93c179ed0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7ec93c1798d0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7ec93c1798d0>>)
+[0.568s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.568s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.568s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.568s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.568s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.568s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.568s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/aladine/memoir/multi-robot-exploration-rl-master'
+[0.568s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.569s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.569s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.569s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.569s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.569s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.569s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.569s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.569s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.588s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.588s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.589s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.589s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.589s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.589s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.589s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.589s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.589s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extensions ['ignore', 'ignore_ament_install']
+[0.590s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extension 'ignore'
+[0.590s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extension 'ignore_ament_install'
+[0.590s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extensions ['colcon_pkg']
+[0.590s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extension 'colcon_pkg'
+[0.590s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extensions ['colcon_meta']
+[0.590s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extension 'colcon_meta'
+[0.590s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extensions ['ros']
+[0.590s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extension 'ros'
+[0.590s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extensions ['cmake', 'python']
+[0.591s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extension 'cmake'
+[0.591s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extension 'python'
+[0.591s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extensions ['python_setup_py']
+[0.591s] Level 1:colcon.colcon_core.package_identification:_identify(images) by extension 'python_setup_py'
+[0.591s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.591s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.591s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.592s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.592s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.592s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.592s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.592s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.592s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.592s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.592s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.593s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.593s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.593s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.593s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.593s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.593s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.593s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.593s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.593s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.593s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_reinforcement_learning) by extensions ['ignore', 'ignore_ament_install']
+[0.594s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_reinforcement_learning) by extension 'ignore'
+[0.594s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_reinforcement_learning) by extension 'ignore_ament_install'
+[0.594s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_reinforcement_learning) by extensions ['colcon_pkg']
+[0.594s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_reinforcement_learning) by extension 'colcon_pkg'
+[0.594s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_reinforcement_learning) by extensions ['colcon_meta']
+[0.594s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_reinforcement_learning) by extension 'colcon_meta'
+[0.594s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_reinforcement_learning) by extensions ['ros']
+[0.594s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_reinforcement_learning) by extension 'ros'
+[0.612s] DEBUG:colcon.colcon_core.package_identification:Package 'src/start_reinforcement_learning' with type 'ros.ament_python' and name 'start_reinforcement_learning'
+[0.612s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_rl_environment) by extensions ['ignore', 'ignore_ament_install']
+[0.612s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_rl_environment) by extension 'ignore'
+[0.612s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_rl_environment) by extension 'ignore_ament_install'
+[0.612s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_rl_environment) by extensions ['colcon_pkg']
+[0.613s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_rl_environment) by extension 'colcon_pkg'
+[0.613s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_rl_environment) by extensions ['colcon_meta']
+[0.613s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_rl_environment) by extension 'colcon_meta'
+[0.613s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_rl_environment) by extensions ['ros']
+[0.613s] Level 1:colcon.colcon_core.package_identification:_identify(src/start_rl_environment) by extension 'ros'
+[0.615s] DEBUG:colcon.colcon_core.package_identification:Package 'src/start_rl_environment' with type 'ros.ament_cmake' and name 'start_rl_environment'
+[0.615s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.615s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.615s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.615s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.615s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.652s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'start_rl_environment' in 'src/start_rl_environment'
+[0.653s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.653s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.658s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 427 installed packages in /opt/ros/humble
+[0.663s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.760s] Level 5:colcon.colcon_core.verb:set package 'start_reinforcement_learning' build argument 'cmake_args' from command line to 'None'
+[0.760s] Level 5:colcon.colcon_core.verb:set package 'start_reinforcement_learning' build argument 'cmake_target' from command line to 'None'
+[0.760s] Level 5:colcon.colcon_core.verb:set package 'start_reinforcement_learning' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.760s] Level 5:colcon.colcon_core.verb:set package 'start_reinforcement_learning' build argument 'cmake_clean_cache' from command line to 'False'
+[0.760s] Level 5:colcon.colcon_core.verb:set package 'start_reinforcement_learning' build argument 'cmake_clean_first' from command line to 'False'
+[0.760s] Level 5:colcon.colcon_core.verb:set package 'start_reinforcement_learning' build argument 'cmake_force_configure' from command line to 'False'
+[0.760s] Level 5:colcon.colcon_core.verb:set package 'start_reinforcement_learning' build argument 'ament_cmake_args' from command line to 'None'
+[0.761s] Level 5:colcon.colcon_core.verb:set package 'start_reinforcement_learning' build argument 'catkin_cmake_args' from command line to 'None'
+[0.761s] Level 5:colcon.colcon_core.verb:set package 'start_reinforcement_learning' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.761s] DEBUG:colcon.colcon_core.verb:Building package 'start_reinforcement_learning' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning', 'merge_install': False, 'path': '/home/aladine/memoir/multi-robot-exploration-rl-master/src/start_reinforcement_learning', 'symlink_install': False, 'test_result_base': None}
+[0.761s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.763s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.763s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/aladine/memoir/multi-robot-exploration-rl-master/src/start_reinforcement_learning' with build type 'ament_python'
+[0.764s] Level 1:colcon.colcon_core.shell:create_environment_hook('start_reinforcement_learning', 'ament_prefix_path')
+[0.769s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.769s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/hook/ament_prefix_path.ps1'
+[0.771s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/hook/ament_prefix_path.dsv'
+[0.771s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/hook/ament_prefix_path.sh'
+[0.773s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.773s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.516s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/aladine/memoir/multi-robot-exploration-rl-master/src/start_reinforcement_learning'
+[1.517s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.517s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.357s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning': PYTHONPATH=/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --uninstall --editable --build-directory /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/build
+[3.299s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning' returned '0': PYTHONPATH=/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --uninstall --editable --build-directory /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/build
+[3.302s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aladine/memoir/multi-robot-exploration-rl-master/src/start_reinforcement_learning': PYTHONPATH=/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/start_reinforcement_learning build --build-base /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/build install --record /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/install.log --single-version-externally-managed install_data --force
+[4.011s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aladine/memoir/multi-robot-exploration-rl-master/src/start_reinforcement_learning' returned '0': PYTHONPATH=/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/start_reinforcement_learning build --build-base /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/build install --record /home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/install.log --single-version-externally-managed install_data --force
+[4.018s] Level 1:colcon.colcon_core.environment:checking '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning' for CMake module files
+[4.019s] Level 1:colcon.colcon_core.environment:checking '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning' for CMake config files
+[4.021s] Level 1:colcon.colcon_core.environment:checking '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib'
+[4.021s] Level 1:colcon.colcon_core.environment:checking '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/bin'
+[4.021s] Level 1:colcon.colcon_core.environment:checking '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/pkgconfig/start_reinforcement_learning.pc'
+[4.022s] Level 1:colcon.colcon_core.environment:checking '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/lib/python3.10/site-packages'
+[4.022s] Level 1:colcon.colcon_core.shell:create_environment_hook('start_reinforcement_learning', 'pythonpath')
+[4.023s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/hook/pythonpath.ps1'
+[4.024s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/hook/pythonpath.dsv'
+[4.025s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/hook/pythonpath.sh'
+[4.026s] Level 1:colcon.colcon_core.environment:checking '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/bin'
+[4.026s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(start_reinforcement_learning)
+[4.027s] INFO:colcon.colcon_core.shell:Creating package script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/package.ps1'
+[4.028s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/package.dsv'
+[4.029s] INFO:colcon.colcon_core.shell:Creating package script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/package.sh'
+[4.030s] INFO:colcon.colcon_core.shell:Creating package script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/package.bash'
+[4.031s] INFO:colcon.colcon_core.shell:Creating package script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/start_reinforcement_learning/package.zsh'
+[4.032s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/aladine/memoir/multi-robot-exploration-rl-master/install/start_reinforcement_learning/share/colcon-core/packages/start_reinforcement_learning)
+[4.032s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[4.033s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[4.033s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[4.033s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[4.046s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[4.046s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[4.046s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[4.071s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[4.071s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/local_setup.ps1'
+[4.074s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/aladine/memoir/multi-robot-exploration-rl-master/install/_local_setup_util_ps1.py'
+[4.078s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/setup.ps1'
+[4.083s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/local_setup.sh'
+[4.085s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/aladine/memoir/multi-robot-exploration-rl-master/install/_local_setup_util_sh.py'
+[4.089s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/setup.sh'
+[4.093s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/local_setup.bash'
+[4.095s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/setup.bash'
+[4.097s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/local_setup.zsh'
+[4.099s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/aladine/memoir/multi-robot-exploration-rl-master/install/setup.zsh'
