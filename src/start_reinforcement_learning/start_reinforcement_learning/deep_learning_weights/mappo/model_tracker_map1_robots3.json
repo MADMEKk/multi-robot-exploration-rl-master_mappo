@@ -1,0 +1,48 @@
+{
+    "best_model": "best_score_-54.10_ep25",
+    "best_score": -54.099873444117215,
+    "models": {
+        "best_score_-61.54_ep9": {
+            "episode": 9,
+            "score": -61.544214803387476,
+            "goal_success_rate": 0.0,
+            "timestamp": "2025-06-01 16:07:17",
+            "path": "/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/start_reinforcement_learning/deep_learning_weights/mappo/map1_robots3_best/best_score_-61.54_ep9"
+        },
+        "best_score_-57.57_ep10": {
+            "episode": 10,
+            "score": -57.566712992445225,
+            "goal_success_rate": 0.0,
+            "timestamp": "2025-06-01 16:07:19",
+            "path": "/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/start_reinforcement_learning/deep_learning_weights/mappo/map1_robots3_best/best_score_-57.57_ep10"
+        },
+        "best_score_-57.01_ep11": {
+            "episode": 11,
+            "score": -57.007210106864726,
+            "goal_success_rate": 0.0,
+            "timestamp": "2025-06-01 16:07:34",
+            "path": "/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/start_reinforcement_learning/deep_learning_weights/mappo/map1_robots3_best/best_score_-57.01_ep11"
+        },
+        "best_score_-56.63_ep12": {
+            "episode": 12,
+            "score": -56.62814611020221,
+            "goal_success_rate": 0.0,
+            "timestamp": "2025-06-01 16:07:52",
+            "path": "/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/start_reinforcement_learning/deep_learning_weights/mappo/map1_robots3_best/best_score_-56.63_ep12"
+        },
+        "best_score_-55.58_ep24": {
+            "episode": 24,
+            "score": -55.57584842581671,
+            "goal_success_rate": 0.0,
+            "timestamp": "2025-06-01 16:12:27",
+            "path": "/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/start_reinforcement_learning/deep_learning_weights/mappo/map1_robots3_best/best_score_-55.58_ep24"
+        },
+        "best_score_-54.10_ep25": {
+            "episode": 25,
+            "score": -54.099873444117215,
+            "goal_success_rate": 0.0,
+            "timestamp": "2025-06-01 16:12:29",
+            "path": "/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_reinforcement_learning/start_reinforcement_learning/deep_learning_weights/mappo/map1_robots3_best/best_score_-54.10_ep25"
+        }
+    }
+}

@@ -139,3 +139,16 @@ src/start_reinforcement_learning/start_reinforcement_learning/deep_learning_weig
 ```
 
 These files contain metadata about all saved models and can be inspected directly if needed.
+
+
+
+# Step 1: Start the environment
+source /opt/ros/humble/setup.bash
+source /home/aladine/memoir/multi-robot-exploration-rl-master/install/setup.bash
+ros2 launch start_rl_environment main.launch.py map_number:=1 robot_number:=3 headless:=false fast_training:=
+
+
+# Step 2: Start the learning algorithm
+source /opt/ros/humble/setup.bash
+source /home/aladine/memoir/multi-robot-exploration-rl-master/install/setup.bash
+ros2 launch start_reinforcement_learning start_learning.launch.py map_number:=1 robot_number:=3 algorithm:=mappo

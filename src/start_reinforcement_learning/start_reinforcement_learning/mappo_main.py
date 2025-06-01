@@ -115,6 +115,9 @@ class MAPPONode(Node):
             terminal = [False] * n_agents
             episode_step = 0
             
+            # Initialize collision tracking
+            collided = [False] * n_agents
+            
             # Truncated means episode has reached max number of steps, done means collided or reached goal
             while not any(terminal):
                 # Convert list of observations to global state
@@ -131,6 +134,11 @@ class MAPPONode(Node):
                 list_reward = list(reward.values())
                 list_obs_ = list(obs_.values())
                 list_trunc = list(truncated.values())
+                
+                # Check for collisions in info dictionary if available, otherwise assume no collisions
+                collided = [info.get(f'robot_{i}', {}).get('collision', False) for i in range(n_agents)]
+                if not any(isinstance(c, bool) for c in collided):  # If no collision data available
+                    collided = [False] * n_agents
                 
                 # Convert list of arrays to one flat array of observations (global state)
                 global_state_ = obs_list_to_state_vector(list_obs_)
