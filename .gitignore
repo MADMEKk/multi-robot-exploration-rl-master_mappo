@@ -1,0 +1,105 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ROS 2
+install/
+log/
+*.launch.log
+
+# Model weights and checkpoints
+deep_learning_weights/*
+!deep_learning_weights/.gitkeep
+*.pth
+*.pt
+*.h5
+*.ckpt
+*.pb
+*.onnx
+*.tflite
+*.trt
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*.ipynb
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation build
+docs/_build/
+docs/api/
+
+# Simulation logs
+*.bag
+*.mcap
+
+# Custom files that might contain sensitive data or large files
+*.csv
+*.json
+!package.json
+!model_tracker*.json
+*.log
+*.out
+*.gv
+*.txt
+!requirements.txt
+!CMakeLists.txt
+
+# Gazebo/ROS world files that should be tracked
+!*.world
+!*.urdf
+!*.xacro
+!*.sdf
+
+# Image files potentially generated during training/evaluation
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.mp4
+*.avi
+
+# Lock files
+yarn.lock
+package-lock.json
+
+# Crash reports
+*.core

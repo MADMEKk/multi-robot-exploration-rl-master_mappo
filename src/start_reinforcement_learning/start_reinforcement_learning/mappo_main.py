@@ -2,6 +2,9 @@ import os
 import rclpy
 from rclpy.node import Node
 import numpy as np
+import json
+import time
+from datetime import datetime
 
 from start_reinforcement_learning.logic import Env
 from start_reinforcement_learning.mappo_algorithm.mappo import MAPPO
@@ -43,8 +46,26 @@ class MAPPONode(Node):
         # Use direct path instead of get_package_share_directory which might fail
         base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # Include map number and robot number in the checkpoint directory path
-        chkpt_dir_var = os.path.join(base_path, 'start_reinforcement_learning', 'deep_learning_weights', 'mappo', f'map{map_number}_robots{robot_number}')
+        self.weights_base_dir = os.path.join(base_path, 'start_reinforcement_learning', 'deep_learning_weights', 'mappo')
+        chkpt_dir_var = os.path.join(self.weights_base_dir, f'map{map_number}_robots{robot_number}')
+        self.best_models_dir = os.path.join(self.weights_base_dir, f'map{map_number}_robots{robot_number}_best')
+        
+        # Create directories if they don't exist
+        os.makedirs(chkpt_dir_var, exist_ok=True)
+        os.makedirs(self.best_models_dir, exist_ok=True)
+        
+        # Create model tracking file if it doesn't exist
+        self.model_tracker_file = os.path.join(self.weights_base_dir, f'model_tracker_map{map_number}_robots{robot_number}.json')
+        if not os.path.exists(self.model_tracker_file):
+            with open(self.model_tracker_file, 'w') as f:
+                json.dump({
+                    'best_model': None,
+                    'best_score': -float('inf'),
+                    'models': {}
+                }, f, indent=4)
+        
         self.get_logger().info(f"Checkpoint directory: {chkpt_dir_var}")
+        self.get_logger().info(f"Best models directory: {self.best_models_dir}")
         
         # Initialize main algorithm
         mappo_agents = MAPPO(actor_dims, critic_dims, n_agents, n_actions, 
@@ -63,6 +84,21 @@ class MAPPONode(Node):
         score_history = []
         evaluate = False
         best_score = 0
+        
+        # Tracking goal achievement for early stopping
+        self.goal_success_history = []
+        self.early_stop_patience = 20  # Stop if no improvement for this many intervals
+        self.early_stop_counter = 0
+        self.goal_success_threshold = 0.85  # 85% success rate for early stopping
+        self.min_episodes_before_stopping = 200  # Min episodes before considering early stop
+        
+        # Load the best score from tracker file if it exists
+        if os.path.exists(self.model_tracker_file):
+            with open(self.model_tracker_file, 'r') as f:
+                tracker_data = json.load(f)
+                if tracker_data.get('best_score') is not None:
+                    best_score = tracker_data['best_score']
+                    self.get_logger().info(f"Loaded previous best score: {best_score}")
 
         # Test network
         if evaluate:
@@ -169,24 +205,81 @@ class MAPPONode(Node):
                 memory.episode_step = 0
                 
             # Calculate the average score per robot
-            score_history.append(score / robot_number)
+            episode_score = score / robot_number
+            score_history.append(episode_score)
             # Average the last 100 recent scores
             avg_score = np.mean(score_history[-100:]) if len(score_history) > 0 else 0
+            
+            # Track goal success rate (whether any robot reached the goal)
+            goal_reached = any(list_done) and not any(collided)
+            self.goal_success_history.append(1 if goal_reached else 0)
+            
+            # Calculate goal success rate over last 50 episodes
+            recent_goal_success_rate = np.mean(self.goal_success_history[-50:]) if len(self.goal_success_history) >= 50 else 0
+            
+            # Log detailed performance metrics every PRINT_INTERVAL episodes
+            if i % PRINT_INTERVAL == 0:
+                self.get_logger().info(f"Episode: {i}, Avg score: {avg_score:.1f}, Goal success rate: {recent_goal_success_rate:.2f}")
             
             if not evaluate and len(score_history) >= 10:  # Wait for at least 10 episodes
                 # Save when score improves
                 if avg_score > best_score:
-                    self.get_logger().info(f'New best score: {avg_score:.1f}! Saving checkpoint...')
+                    self.get_logger().info(f'New best score: {avg_score:.1f}! Saving best checkpoint...')
+                    
+                    # Save to best models directory
+                    best_model_dir = os.path.join(self.best_models_dir, f'best_score_{avg_score:.2f}_ep{i}')
+                    os.makedirs(best_model_dir, exist_ok=True)
+                    
+                    # Temporarily change the checkpoint directory
+                    original_chkpt_dir = mappo_agents.agents[0].actor.chkpt_file
+                    for agent in mappo_agents.agents:
+                        agent.actor.chkpt_file = os.path.join(best_model_dir, os.path.basename(agent.actor.chkpt_file))
+                        agent.critic.chkpt_file = os.path.join(best_model_dir, os.path.basename(agent.critic.chkpt_file))
+                    
                     mappo_agents.save_checkpoint()
+                    
+                    # Restore original checkpoint directory
+                    for agent_idx, agent in enumerate(mappo_agents.agents):
+                        agent.actor.chkpt_file = original_chkpt_dir.replace('agent_0', f'agent_{agent_idx}')
+                        agent.critic.chkpt_file = original_chkpt_dir.replace('agent_0_actor', f'agent_{agent_idx}_critic')
+                    
+                    # Update model tracker file
+                    with open(self.model_tracker_file, 'r') as f:
+                        tracker_data = json.load(f)
+                    
+                    model_info = {
+                        'episode': i,
+                        'score': float(avg_score),
+                        'goal_success_rate': float(recent_goal_success_rate),
+                        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        'path': best_model_dir
+                    }
+                    
+                    model_key = f'best_score_{avg_score:.2f}_ep{i}'
+                    tracker_data['models'][model_key] = model_info
+                    tracker_data['best_model'] = model_key
+                    tracker_data['best_score'] = float(avg_score)
+                    
+                    with open(self.model_tracker_file, 'w') as f:
+                        json.dump(tracker_data, f, indent=4)
+                    
                     best_score = avg_score
+                    # Reset early stopping counter since we found a better model
+                    self.early_stop_counter = 0
+                    
+                    # Also save a copy to the regular checkpoint directory for continued training
+                    mappo_agents.save_checkpoint()
                 
                 # Also save periodically every 50 episodes
                 if i % 50 == 0 and i > 0:
                     self.get_logger().info(f'Periodic save at episode {i}...')
                     # Save to a different directory to avoid overwriting best models
                     periodic_chkpt_dir = os.path.join(os.path.dirname(chkpt_dir_var), f'periodic_ep{i}')
+                    os.makedirs(periodic_chkpt_dir, exist_ok=True)
+                    
                     # Log the absolute path where models will be saved
                     self.get_logger().info(f'Models will be saved to: {os.path.abspath(periodic_chkpt_dir)}')
+                    
                     # Temporarily change the checkpoint directory
                     original_chkpt_dir = mappo_agents.agents[0].actor.chkpt_file
                     for agent in mappo_agents.agents:
@@ -199,6 +292,39 @@ class MAPPONode(Node):
                     for agent_idx, agent in enumerate(mappo_agents.agents):
                         agent.actor.chkpt_file = original_chkpt_dir.replace('agent_0', f'agent_{agent_idx}')
                         agent.critic.chkpt_file = original_chkpt_dir.replace('agent_0_actor', f'agent_{agent_idx}_critic')
+                    
+                    # Update model tracker with periodic save info
+                    with open(self.model_tracker_file, 'r') as f:
+                        tracker_data = json.load(f)
+                    
+                    model_info = {
+                        'episode': i,
+                        'score': float(avg_score),
+                        'goal_success_rate': float(recent_goal_success_rate),
+                        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        'path': periodic_chkpt_dir
+                    }
+                    
+                    model_key = f'periodic_ep{i}'
+                    tracker_data['models'][model_key] = model_info
+                    
+                    with open(self.model_tracker_file, 'w') as f:
+                        json.dump(tracker_data, f, indent=4)
+                
+                # Check early stopping conditions if we have enough episodes
+                if i > self.min_episodes_before_stopping and len(self.goal_success_history) >= 50:
+                    # If goal success rate is high enough and score hasn't improved for a while
+                    if recent_goal_success_rate >= self.goal_success_threshold:
+                        self.early_stop_counter += 1
+                        self.get_logger().info(f'High goal success rate achieved ({recent_goal_success_rate:.2f}). Early stop counter: {self.early_stop_counter}/{self.early_stop_patience}')
+                        
+                        if self.early_stop_counter >= self.early_stop_patience:
+                            self.get_logger().info(f'EARLY STOPPING: Goal success rate {recent_goal_success_rate:.2f} above threshold {self.goal_success_threshold} for {self.early_stop_patience} intervals')
+                            self.get_logger().info(f'Final best model stored at: {tracker_data["best_model"]} with score {tracker_data["best_score"]:.2f}')
+                            break
+                    else:
+                        # Reset counter if goal success rate drops below threshold
+                        self.early_stop_counter = 0
                     
             if i % PRINT_INTERVAL == 0:
                 self.get_logger().info('Episode: {}, Average score: {:.1f}, Episode Score: {:.1f}'.format(

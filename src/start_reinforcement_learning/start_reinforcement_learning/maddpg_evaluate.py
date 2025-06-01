@@ -43,31 +43,61 @@ class MADDPGEvaluateNode(Node):
         # Use direct path instead of get_package_share_directory which might fail
         base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         
-        # Determine which model to load based on model_episode parameter
-        if model_episode > 0:
-            # Load a specific periodic save
-            chkpt_dir_var = os.path.join(base_path, 'start_reinforcement_learning', 'deep_learning_weights', 
-                                        'maddpg', f'periodic_ep{model_episode}')
-            self.get_logger().info(f"Loading periodic save from episode {model_episode}")
-        else:
-            # Load the best model
-            chkpt_dir_var = os.path.join(base_path, 'start_reinforcement_learning', 'deep_learning_weights', 
-                                        'maddpg', f'map{map_number}_robots{robot_number}')
-            self.get_logger().info(f"Loading best model")
-            
-        self.get_logger().info(f"Checkpoint directory: {chkpt_dir_var}")
+        # Check if a specific model path was provided via environment variable
+        model_path_env = os.getenv('model_path')
         
-        # Check if the directory exists
-        if not os.path.exists(chkpt_dir_var):
-            # Try looking in the src directory instead
-            src_base_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'src')
+        if model_path_env and os.path.exists(model_path_env):
+            # Use the specific model path from environment variable
+            chkpt_dir_var = model_path_env
+            self.get_logger().info(f"Using model path from environment variable: {chkpt_dir_var}")
+        else:
+            # Use the traditional method with model_episode
+            # Base checkpoint directory
+            chkpt_dir_var = os.path.join(base_path, 'start_reinforcement_learning', 'deep_learning_weights', 'maddpg')
+            
+            # If using src directory instead of build
+            src_chkpt_dir = os.path.join('/home/aladine/memoir/multi-robot-exploration-rl-master/src', 
+                                         'start_reinforcement_learning', 'start_reinforcement_learning', 
+                                         'deep_learning_weights', 'maddpg')
+            
+            # Check if src directory exists and use it if it does
+            if os.path.exists(src_chkpt_dir):
+                chkpt_dir_var = src_chkpt_dir
+                
+            # Find best model directory if available
+            best_models_dir = os.path.join(chkpt_dir_var, f'map{map_number}_robots{robot_number}_best')
+            
+            # First, try to load from the best models directory if model_episode is 0
+            if model_episode == 0 and os.path.exists(best_models_dir):
+                # Check if a model tracker file exists
+                tracker_file = os.path.join(os.path.dirname(best_models_dir), 
+                                          f'model_tracker_map{map_number}_robots{robot_number}.json')
+                
+                if os.path.exists(tracker_file):
+                    # Load the best model from the tracker file
+                    import json
+                    with open(tracker_file, 'r') as f:
+                        tracker_data = json.load(f)
+                        
+                    best_model_key = tracker_data.get('best_model')
+                    if best_model_key and best_model_key in tracker_data.get('models', {}):
+                        best_model_path = tracker_data['models'][best_model_key].get('path')
+                        if best_model_path and os.path.exists(best_model_path):
+                            chkpt_dir_var = best_model_path
+                            self.get_logger().info(f"Using best model from tracker: {best_model_key}")
+                            self.get_logger().info(f"Best model score: {tracker_data['models'][best_model_key].get('score')}")
+                            self.get_logger().info(f"Goal success rate: {tracker_data['models'][best_model_key].get('goal_success_rate')}")
+            
+            # If no best model found or model_episode > 0, use the periodic directory
             if model_episode > 0:
-                chkpt_dir_var = os.path.join(src_base_path, 'start_reinforcement_learning', 'start_reinforcement_learning', 
-                                            'deep_learning_weights', 'maddpg', f'periodic_ep{model_episode}')
-            else:
-                chkpt_dir_var = os.path.join(src_base_path, 'start_reinforcement_learning', 'start_reinforcement_learning', 
-                                            'deep_learning_weights', 'maddpg', f'map{map_number}_robots{robot_number}')
-            self.get_logger().info(f"Trying alternative checkpoint directory: {chkpt_dir_var}")
+                chkpt_dir_var = os.path.join(os.path.dirname(chkpt_dir_var), f'periodic_ep{model_episode}')
+                self.get_logger().info(f"Loading periodic save from episode {model_episode}")
+            # If model_episode is 0 and no best model was found, use the default directory
+            elif model_episode == 0 and not ('best_model_key' in locals() and best_model_key):
+                chkpt_dir_var = os.path.join(chkpt_dir_var, f'map{map_number}_robots{robot_number}')
+                self.get_logger().info(f"Loading default model")
+                
+        self.get_logger().info(f"Checkpoint directory: {chkpt_dir_var}")
         
         # Initialize main algorithm
         maddpg_agents = MADDPG(actor_dims, critic_dims, n_agents, n_actions, 
@@ -123,13 +153,22 @@ class MADDPGEvaluateNode(Node):
             episode_score = score/robot_number
             score_history.append(episode_score)
             
+            # Track goal success
+            goal_reached = any(list_done) and not any([d and not r > 0 for d, r in zip(list_done, list_reward)])
+            
             if i % PRINT_INTERVAL == 0 or i == N_GAMES - 1:
                 avg_score = np.mean(score_history[-PRINT_INTERVAL:])
-                self.get_logger().info(f'Episode: {i}, Score: {episode_score:.1f}, Average score: {avg_score:.1f}')
+                self.get_logger().info(f'Episode: {i}, Score: {episode_score:.1f}, Average score: {avg_score:.1f}, Goal reached: {goal_reached}')
 
+        # Calculate goal success rate
+        goal_success_count = sum(1 for i in range(N_GAMES) if score_history[i] > 0)
+        goal_success_rate = goal_success_count / N_GAMES
+        
         # Final evaluation results
         overall_avg_score = np.mean(score_history)
-        self.get_logger().info(f'Evaluation complete. Overall average score: {overall_avg_score:.1f}')
+        self.get_logger().info(f'Evaluation complete:')
+        self.get_logger().info(f'Overall average score: {overall_avg_score:.1f}')
+        self.get_logger().info(f'Goal success rate: {goal_success_rate:.2f} ({goal_success_count}/{N_GAMES})')
 
 
 def main(args=None):
@@ -139,10 +178,16 @@ def main(args=None):
     robot_number = int(os.getenv('robot_number', '3'))
     model_episode = int(os.getenv('model_episode', '0'))
     
-    node = MADDPGEvaluateNode(map_number, robot_number, model_episode)
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
+    try:
+        node = MADDPGEvaluateNode(map_number, robot_number, model_episode)
+        rclpy.spin(node)
+        node.destroy_node()
+    except Exception as e:
+        print(f"Error initializing or running evaluation node: {e}")
+        import traceback
+        print(traceback.format_exc())
+    finally:
+        rclpy.shutdown()
     
     return 0
 
