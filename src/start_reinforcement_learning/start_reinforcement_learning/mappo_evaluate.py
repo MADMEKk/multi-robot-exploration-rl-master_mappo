@@ -2,9 +2,13 @@ import os
 import rclpy
 from rclpy.node import Node
 import numpy as np
+import csv
+import time
+from datetime import datetime
 
 from start_reinforcement_learning.logic import Env
 from start_reinforcement_learning.mappo_algorithm.mappo import MAPPO
+from start_reinforcement_learning.evaluation_metrics import EvaluationMetrics
 import torch as T
 from ament_index_python.packages import get_package_share_directory
 
@@ -72,23 +76,53 @@ class MAPPOEvaluateNode(Node):
         mappo_agents.load_checkpoint()
         self.get_logger().info("Loaded trained model for evaluation")
 
+        # Create results directory if it doesn't exist
+        results_dir = os.path.join(base_path, 'start_reinforcement_learning', 'evaluation_results')
+        os.makedirs(results_dir, exist_ok=True)
+        
+        # Initialize metrics tracker
+        metrics = EvaluationMetrics(
+            save_dir=results_dir,
+            algorithm='mappo',
+            map_number=map_number,
+            robot_number=robot_number,
+            model_episode=model_episode
+        )
+
         PRINT_INTERVAL = 1
         N_GAMES = 100  # Number of evaluation episodes
-        score_history = []
 
         # Evaluation loop
         for i in range(N_GAMES):
-            # Reset to get initial observation
+            # Reset environment and get initial observation
             obs = env.reset()
             # Convert dict -> list of arrays
             list_obs = list(obs.values())
+            
+            # Get initial unexplored area for exploration ratio calculation
+            initial_unexplored = env.get_total_unexplored_area()
+            
+            # Start tracking metrics for this episode
+            metrics.start_episode(initial_unexplored=initial_unexplored)
+            
             score = 0
             done = [False] * n_agents
             terminal = [False] * n_agents
             episode_step = 0
+            goal_reached = False
+            collision = False
+            
+            # Track start time
+            start_time = time.time()
+            
+            # Track drone positions for trajectory visualization
+            robot_positions_history = []
             
             # Truncated means episode has reached max number of steps, done means collided or reached goal
             while not any(terminal):
+                # Record robot positions
+                robot_positions_history.append(env.get_robot_positions())
+                
                 # Convert list of observations to global state
                 global_state = obs_list_to_state_vector(list_obs)
                 
@@ -99,6 +133,12 @@ class MAPPOEvaluateNode(Node):
                 # Use step function to get next state and reward info as well as if the episode is 'done'
                 obs_, reward, done, truncated, info = env.step(actions)
                 
+                # Update coordination metrics
+                metrics.update_coordination_metrics(
+                    env.get_robot_positions(), 
+                    exploration_overlap=info['exploration_overlap'] if 'exploration_overlap' in info else 0
+                )
+                
                 # Convert dict -> list of arrays
                 list_done = list(done.values())
                 list_reward = list(reward.values())
@@ -107,24 +147,60 @@ class MAPPOEvaluateNode(Node):
                 
                 # Check if episode is done
                 terminal = [d or t for d, t in zip(list_done, list_trunc)]
+                
+                # Check for goal or collision
+                if any(list_done):
+                    # Check if any robot reached the goal
+                    for robot_idx in range(n_agents):
+                        if env.hasReachedGoal(list_obs[robot_idx], robot_idx):
+                            goal_reached = True
+                            break
+                    
+                    # If not goal, must be collision
+                    if not goal_reached:
+                        collision = True
 
                 # Set new obs to current obs
                 obs = obs_
                 list_obs = list_obs_
                 score += sum(list_reward)
                 episode_step += 1
-                
-            # Calculate the average score per robot
-            score_history.append(score / robot_number)
-            # Average the scores
-            avg_score = np.mean(score_history)
+            
+            # Record end time and calculate duration
+            episode_duration = time.time() - start_time
+            
+            # Get final unexplored area
+            final_unexplored = env.get_total_unexplored_area()
+            
+            # End episode tracking
+            metrics.end_episode(
+                reward=score/robot_number,
+                steps=episode_step,
+                final_unexplored=final_unexplored,
+                goal_reached=goal_reached,
+                collision=collision
+            )
                     
             if i % PRINT_INTERVAL == 0:
-                self.get_logger().info('Evaluation Episode: {}, Average score: {:.1f}, Episode Score: {:.1f}, Steps: {}'.format(
-                    i, avg_score, score / robot_number, episode_step))
+                self.get_logger().info('Evaluation Episode: {}, Score: {:.1f}, Steps: {}, Outcome: {}'.format(
+                    i, score / robot_number, episode_step, 
+                    "Goal Reached" if goal_reached else ("Collision" if collision else "Timeout")
+                ))
 
         # Final evaluation results
-        self.get_logger().info(f"Evaluation complete. Final average score over {N_GAMES} episodes: {avg_score:.2f}")
+        summary = metrics.get_summary_metrics()
+        self.get_logger().info(f"Evaluation complete. Final average score: {summary['avg_reward']:.2f}")
+        self.get_logger().info(f"Success rate: {summary['success_rate']:.1f}%, " +
+                              f"Collision rate: {summary['collision_rate']:.1f}%, " +
+                              f"Timeout rate: {summary['timeout_rate']:.1f}%")
+        
+        # Save metrics to CSV
+        metrics.save_metrics_to_csv()
+        
+        # Generate plots and HTML report
+        metrics.plot_metrics()
+        report_path = metrics.generate_html_report()
+        self.get_logger().info(f"Generated evaluation report: {report_path}")
 
 
 def main(args=None):

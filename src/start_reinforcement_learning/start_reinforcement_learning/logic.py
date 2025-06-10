@@ -13,6 +13,7 @@ from nav_msgs.msg import Odometry
 from rclpy.qos import qos_profile_sensor_data
 
 from start_reinforcement_learning.restart_environment import RestartEnvironment
+from start_reinforcement_learning.exploration_metrics import ExplorationMetrics
 
 class Env():
     def __init__(self, number_of_robots = 3, map_number = 1):
@@ -70,6 +71,14 @@ class Env():
         # Rewards
         self.goalReward = 20
         self.collisionReward = -20
+        
+        # Initialize exploration metrics
+        self.exploration_metrics = ExplorationMetrics(map_size=(20.0, 20.0), resolution=0.5)
+        self.exploration_metrics.reset(robot_count=self.number_of_robots)
+        
+        # Track goals and collisions for evaluation
+        self.goals_reached = 0
+        self.collisions = 0
 
     # get obs space.  in future we will reutrn proper box but for now just
     # return .shape E.G just a number
@@ -257,6 +266,20 @@ class Env():
             min_scan = np.min(scan_range[:36]) if len(scan_range) >= 36 else 0.5
             self.current_min_scan.append(min_scan)
 
+        # Build list of robot positions for exploration tracking
+        robot_positions = []
+        for i in range(self.number_of_robots):
+            robot_positions.append((self.current_pose_x[i], self.current_pose_y[i]))
+        
+        # Update exploration metrics
+        newly_explored = self.exploration_metrics.update_exploration(robot_positions, sensor_ranges=3.5)
+        exploration_overlap = self.exploration_metrics.get_exploration_overlap()
+        
+        # Add this to info dict
+        info['newly_explored'] = newly_explored
+        info['exploration_coverage'] = self.exploration_metrics.get_exploration_coverage()
+        info['exploration_overlap'] = exploration_overlap
+        
         # Return truncated true if max steps reached
         if self.step_counter + 1 > self.MAX_STEPS:
             truncated = [True] * self.number_of_robots
@@ -365,6 +388,7 @@ class Env():
     # Resets the environment, gets initial observations and returns robots back to there original poses
     def reset(self):
         self.step_counter = 0
+        self.exploration_metrics.reset(robot_count=self.number_of_robots)
         self.restart_environment.reset_robots()
         self.updateRobotPosition()
 
@@ -414,6 +438,36 @@ class Env():
         for i, val in enumerate(obs):
             robot_observations['robot'+str(i)] = val
         return robot_observations
+
+    def get_total_unexplored_area(self):
+        """
+        Get the total unexplored area in the environment.
+        
+        Returns:
+            int: Count of unexplored cells
+        """
+        return self.exploration_metrics.get_unexplored_area()
+    
+    def calculate_exploration_overlap(self):
+        """
+        Calculate how much exploration effort is duplicated between robots.
+        
+        Returns:
+            float: Percentage of exploration effort that was redundant
+        """
+        return self.exploration_metrics.get_exploration_overlap()
+    
+    def get_robot_positions(self):
+        """
+        Get current positions of all robots.
+        
+        Returns:
+            list: List of (x, y) positions for each robot
+        """
+        positions = []
+        for i in range(self.number_of_robots):
+            positions.append((self.current_pose_x[i], self.current_pose_y[i]))
+        return positions
 
 class ReadScan(Node):
     def __init__(self, robot_number):

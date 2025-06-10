@@ -1,13 +1,6 @@
 package.xml
 setup.cfg
 setup.py
-../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/PKG-INFO
-../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/SOURCES.txt
-../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/dependency_links.txt
-../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/entry_points.txt
-../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/requires.txt
-../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/top_level.txt
-../../build/start_reinforcement_learning/start_reinforcement_learning.egg-info/zip-safe
 launch/compare_algorithms.launch.py
 launch/evaluate.launch.py
 launch/evaluate_maddpg.launch.py
@@ -16,6 +9,8 @@ launch/start_learning.launch.py
 resource/start_reinforcement_learning
 start_reinforcement_learning/__init__.py
 start_reinforcement_learning/algorithm_comparison.py
+start_reinforcement_learning/evaluation_metrics.py
+start_reinforcement_learning/exploration_metrics.py
 start_reinforcement_learning/logic.py
 start_reinforcement_learning/maddpg_evaluate.py
 start_reinforcement_learning/maddpg_main.py
@@ -24,6 +19,13 @@ start_reinforcement_learning/mappo_main.py
 start_reinforcement_learning/metrics_analyzer.py
 start_reinforcement_learning/restart_environment.py
 start_reinforcement_learning/run_algorithm_comparison.py
+start_reinforcement_learning.egg-info/PKG-INFO
+start_reinforcement_learning.egg-info/SOURCES.txt
+start_reinforcement_learning.egg-info/dependency_links.txt
+start_reinforcement_learning.egg-info/entry_points.txt
+start_reinforcement_learning.egg-info/requires.txt
+start_reinforcement_learning.egg-info/top_level.txt
+start_reinforcement_learning.egg-info/zip-safe
 start_reinforcement_learning/env_logic/__init__.py
 start_reinforcement_learning/env_logic/logic.py
 start_reinforcement_learning/env_logic/restart_environment.py
@@ -39,6 +41,3 @@ start_reinforcement_learning/mappo_algorithm/logic.py
 start_reinforcement_learning/mappo_algorithm/mappo.py
 start_reinforcement_learning/mappo_algorithm/networks.py
 start_reinforcement_learning/mappo_algorithm/restart_environment.py
-test/test_copyright.py
-test/test_flake8.py
-test/test_pep257.py

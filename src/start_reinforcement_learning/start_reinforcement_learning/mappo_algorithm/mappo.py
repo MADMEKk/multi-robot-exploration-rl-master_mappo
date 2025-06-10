@@ -154,3 +154,20 @@ class MAPPO:
                 self.logger.get_logger().info(
                     f"Agent {agent_idx} - Policy Loss: {policy_loss:.4f}, Value Loss: {value_loss:.4f}, Entropy: {entropy_loss:.4f}"
                 )
+                
+    def get_lr(self):
+        """
+        Get the current learning rate of the agents.
+        
+        Returns:
+            float: The learning rate of the first agent's actor optimizer
+        """
+        if not self.agents:
+            return 0.0
+            
+        # Get learning rate from the first agent's actor optimizer
+        # (All agents likely have the same learning rate)
+        try:
+            return self.agents[0].actor.optimizer.param_groups[0]['lr']
+        except (IndexError, AttributeError):
+            return 0.0

@@ -2,6 +2,9 @@ import os
 import rclpy
 from rclpy.node import Node
 import numpy as np
+import csv
+from datetime import datetime
+import time
 
 from start_reinforcement_learning.logic import Env
 from start_reinforcement_learning.mappo_algorithm.mappo import MAPPO
@@ -9,6 +12,7 @@ from start_reinforcement_learning.mappo_algorithm.buffer import MultiAgentReplay
 import torch as T
 import gc
 from ament_index_python.packages import get_package_share_directory
+import matplotlib.pyplot as plt
 
 # Convert list of arrays to one flat array of observations
 def obs_list_to_state_vector(observation):
@@ -46,6 +50,13 @@ class MAPPONode(Node):
         chkpt_dir_var = os.path.join(base_path, 'start_reinforcement_learning', 'deep_learning_weights', 'mappo', f'map{map_number}_robots{robot_number}')
         self.get_logger().info(f"Checkpoint directory: {chkpt_dir_var}")
         
+        # Create training metrics directory
+        training_metrics_dir = os.path.join(base_path, 'start_reinforcement_learning', 'training_metrics')
+        os.makedirs(training_metrics_dir, exist_ok=True)
+        
+        # Timestamp for unique filenames
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
         # Initialize main algorithm
         mappo_agents = MAPPO(actor_dims, critic_dims, n_agents, n_actions, 
                              fc1=512, fc2=512, tau=0.00025,
@@ -58,13 +69,25 @@ class MAPPONode(Node):
                                         gamma=0.99, gae_lambda=0.95)
 
         PRINT_INTERVAL = 10
-        N_GAMES = 5000
+        N_GAMES = 10000
         total_steps = 0
         score_history = []
-        evaluate = False
-        best_score = 0
+        step_history = []
+        success_history = []
+        collision_history = []
+        timeout_history = []
+        exploration_history = []
+        best_score = -20
 
-        # Test network
+        # Create training metrics file
+        metrics_filename = os.path.join(training_metrics_dir, f"mappo_training_map{map_number}_robots{robot_number}_{timestamp}.csv")
+        with open(metrics_filename, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(['Episode', 'Score', 'Steps', 'Success', 'Collision', 'Timeout', 
+                            'Exploration_Coverage', 'Avg_Reward', 'Learning_Rate'])
+
+        # Evaluate flag - for testing only
+        evaluate = False
         if evaluate:
             mappo_agents.load_checkpoint()
 
@@ -78,6 +101,11 @@ class MAPPONode(Node):
             done = [False] * n_agents
             terminal = [False] * n_agents
             episode_step = 0
+            
+            # Episode tracking variables
+            episode_success = False
+            episode_collision = False
+            episode_timeout = False
             
             # Truncated means episode has reached max number of steps, done means collided or reached goal
             while not any(terminal):
@@ -101,6 +129,22 @@ class MAPPONode(Node):
                 
                 # Check if episode is done
                 terminal = [d or t for d, t in zip(list_done, list_trunc)]
+
+                # Check for goal or collision
+                if any(list_done):
+                    # Check if any robot reached the goal
+                    for robot_idx in range(n_agents):
+                        if env.hasReachedGoal(list_obs[robot_idx], robot_idx):
+                            episode_success = True
+                            break
+                    
+                    # If not goal, must be collision
+                    if not episode_success:
+                        episode_collision = True
+                        
+                # Check for timeout
+                if any(list_trunc) and not any(list_done):
+                    episode_timeout = True
 
                 # Store transition in memory
                 memory.store_transition(list_obs, global_state, actions, list_reward, 
@@ -169,9 +213,34 @@ class MAPPONode(Node):
                 memory.episode_step = 0
                 
             # Calculate the average score per robot
-            score_history.append(score / robot_number)
+            episode_score = score / robot_number
+            score_history.append(episode_score)
+            step_history.append(episode_step)
+            
+            # Record episode outcome
+            success_history.append(1 if episode_success else 0)
+            collision_history.append(1 if episode_collision else 0)
+            timeout_history.append(1 if episode_timeout else 0)
+            
+            # Get exploration coverage
+            exploration_coverage = info.get('exploration_coverage', 0) if info else 0
+            exploration_history.append(exploration_coverage)
+            
             # Average the last 100 recent scores
             avg_score = np.mean(score_history[-100:]) if len(score_history) > 0 else 0
+            
+            # Record metrics to CSV
+            with open(metrics_filename, 'a', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([i, episode_score, episode_step, 
+                               int(episode_success), int(episode_collision), int(episode_timeout),
+                               exploration_coverage, avg_score, mappo_agents.get_lr()])
+            
+            # Generate training plots periodically
+            if i % 50 == 0 and i > 0:
+                self.plot_training_metrics(score_history, step_history, success_history, 
+                                          collision_history, timeout_history, exploration_history,
+                                          training_metrics_dir, map_number, robot_number, timestamp)
             
             if not evaluate and len(score_history) >= 10:  # Wait for at least 10 episodes
                 # Save when score improves
@@ -201,8 +270,72 @@ class MAPPONode(Node):
                         agent.critic.chkpt_file = original_chkpt_dir.replace('agent_0_actor', f'agent_{agent_idx}_critic')
                     
             if i % PRINT_INTERVAL == 0:
-                self.get_logger().info('Episode: {}, Average score: {:.1f}, Episode Score: {:.1f}'.format(
-                    i, avg_score, score / robot_number))
+                # Calculate success, collision, and timeout rates over last 100 episodes
+                recent_success = np.mean(success_history[-100:]) * 100 if success_history else 0
+                recent_collision = np.mean(collision_history[-100:]) * 100 if collision_history else 0
+                recent_timeout = np.mean(timeout_history[-100:]) * 100 if timeout_history else 0
+                
+                self.get_logger().info('Episode: {}, Avg score: {:.1f}, Score: {:.1f}, Steps: {}, S/C/T: {:.0f}%/{:.0f}%/{:.0f}%, Expl: {:.1f}%'.format(
+                    i, avg_score, episode_score, episode_step, recent_success, recent_collision, recent_timeout, 
+                    exploration_coverage * 100))
+                
+    def plot_training_metrics(self, scores, steps, successes, collisions, timeouts, explorations, 
+                              save_dir, map_number, robot_number, timestamp):
+        """Generate and save plots of training metrics."""
+        # Plot rolling average of rewards
+        plt.figure(figsize=(10, 6))
+        episodes = range(1, len(scores) + 1)
+        plt.plot(episodes, scores, 'b-', alpha=0.3)
+        
+        # Add rolling average
+        window_size = min(100, len(scores))
+        if window_size > 0:
+            rolling_mean = np.convolve(scores, np.ones(window_size)/window_size, mode='valid')
+            plt.plot(range(window_size, len(scores) + 1), rolling_mean, 'r-')
+        
+        plt.xlabel('Episode')
+        plt.ylabel('Score')
+        plt.title('Training Scores')
+        plt.grid(True)
+        plt.savefig(os.path.join(save_dir, f'mappo_scores_map{map_number}_robots{robot_number}_{timestamp}.png'))
+        plt.close()
+        
+        # Plot success/collision/timeout rates
+        plt.figure(figsize=(10, 6))
+        window_size = min(100, len(successes))
+        if window_size > 0:
+            success_rate = np.convolve(successes, np.ones(window_size)/window_size, mode='valid') * 100
+            collision_rate = np.convolve(collisions, np.ones(window_size)/window_size, mode='valid') * 100
+            timeout_rate = np.convolve(timeouts, np.ones(window_size)/window_size, mode='valid') * 100
+            
+            plt.plot(range(window_size, len(successes) + 1), success_rate, 'g-', label='Success')
+            plt.plot(range(window_size, len(collisions) + 1), collision_rate, 'r-', label='Collision')
+            plt.plot(range(window_size, len(timeouts) + 1), timeout_rate, 'y-', label='Timeout')
+            
+        plt.xlabel('Episode')
+        plt.ylabel('Rate (%)')
+        plt.title('Episode Outcomes')
+        plt.legend()
+        plt.grid(True)
+        plt.savefig(os.path.join(save_dir, f'mappo_outcomes_map{map_number}_robots{robot_number}_{timestamp}.png'))
+        plt.close()
+        
+        # Plot exploration coverage
+        plt.figure(figsize=(10, 6))
+        plt.plot(episodes, explorations, 'g-', alpha=0.3)
+        
+        # Add rolling average
+        window_size = min(100, len(explorations))
+        if window_size > 0:
+            rolling_mean = np.convolve(explorations, np.ones(window_size)/window_size, mode='valid')
+            plt.plot(range(window_size, len(explorations) + 1), rolling_mean, 'b-')
+        
+        plt.xlabel('Episode')
+        plt.ylabel('Exploration Coverage')
+        plt.title('Exploration Efficiency')
+        plt.grid(True)
+        plt.savefig(os.path.join(save_dir, f'mappo_exploration_map{map_number}_robots{robot_number}_{timestamp}.png'))
+        plt.close()
 
 
 def main(args=None):
