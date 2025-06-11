@@ -1,1 +1,0 @@
-/home/aladine/memoir/multi-robot-exploration-rl-master/build/start_rl_environment/ament_cmake_environment_hooks/local_setup.sh

@@ -40,8 +40,8 @@ class Env():
         # Create a node for logging output to terminal
         self.logger = Logger()
         
-        # 36 rays + [angluar velocity, linear velocity]
-        self.single_robot_observation_space = 38
+        # 36 rays + [angluar velocity, linear velocity, goal_x_rel, goal_y_rel]
+        self.single_robot_observation_space = 40  # Updated from 38 to 40 to include goal position
         self.individual_robot_action_space = 2
         self.total_robot_observation_space = []
         for _ in range(self.number_of_robots):
@@ -152,6 +152,34 @@ class Env():
     def getRewards(self):
         robotRewards = np.zeros(self.number_of_robots)
         
+        # Calculate team-level exploration rewards
+        newly_explored = 0
+        exploration_coverage = 0
+        exploration_overlap = 0
+        
+        # Get exploration stats if available
+        if hasattr(self, 'exploration_metrics'):
+            # Get robot positions for exploration updates
+            robot_positions = []
+            for i in range(self.number_of_robots):
+                robot_positions.append((self.current_pose_x[i], self.current_pose_y[i]))
+            
+            # Update exploration metrics
+            newly_explored = self.exploration_metrics.update_exploration(robot_positions, sensor_ranges=3.5)
+            exploration_coverage = self.exploration_metrics.get_exploration_coverage()
+            exploration_overlap = self.exploration_metrics.get_exploration_overlap()
+            
+            # Get per-robot exploration stats
+            robot_stats = self.exploration_metrics.get_robot_exploration_stats()
+        
+        # Calculate team exploration bonus (shared among all robots)
+        team_exploration_reward = newly_explored * 0.5  # Reward for newly explored cells
+        
+        # Calculate overlap penalty (only if there's significant overlap)
+        overlap_penalty = 0
+        if exploration_overlap > 0.2:  # Only penalize if overlap > 20%
+            overlap_penalty = (exploration_overlap - 0.2) * 0.3
+        
         for i in range(self.number_of_robots):
             # Base reward starts at a small negative value to encourage faster goal completion
             currentReward = -0.1
@@ -184,6 +212,19 @@ class Env():
             # Penalize excessive rotation (spinning in place)
             if abs(self.current_angular_velocity[i]) > 0.3:
                 currentReward -= 0.2 * abs(self.current_angular_velocity[i])
+            
+            # Add exploration-based rewards
+            # Share team exploration reward among robots
+            currentReward += team_exploration_reward / self.number_of_robots
+            
+            # Add individual exploration contribution if available
+            if hasattr(self, 'exploration_metrics') and len(robot_stats) > i:
+                # Reward based on this robot's individual exploration contribution
+                individual_contribution = robot_stats[i]['exploration_percentage'] * 0.2
+                currentReward += individual_contribution
+            
+            # Apply overlap penalty to discourage robots following each other
+            currentReward -= overlap_penalty
                 
             robotRewards[i] = currentReward
         
@@ -223,14 +264,47 @@ class Env():
             self.current_pose_x[i] = odom_data.pose.pose.position.x
             self.current_pose_y[i] = odom_data.pose.pose.position.y    
     
-    # Adds linear and angular velocities to the scan observation
+    # Adds linear and angular velocities and goal position to the scan observation
     def addVelocitiesToObs(self, scans):
-        # This returns the size of observation space, linear and angular velocities are the last two observations
-        velocities_index = self.single_robot_observation_space
+        # This now adds velocities AND goal position to observations
+        # Index layout: [0:35] - lidar, [36] - linear velocity, [37] - angular velocity, 
+        # [38] - relative goal x, [39] - relative goal y
+        velocities_index = 36  # First 36 values are lidar readings
+        
         for i in range(self.number_of_robots):
-            scans[i][velocities_index-2] = self.current_linear_velocity[i]
-            scans[i][velocities_index-1] = self.current_angular_velocity[i]
-        return scans 
+            # Add velocities
+            scans[i][velocities_index] = self.current_linear_velocity[i]
+            scans[i][velocities_index+1] = self.current_angular_velocity[i]
+            
+            # Calculate relative goal position for this robot
+            if self.current_goal_location and len(self.current_goal_location) >= 2:
+                goal_x_rel = self.current_goal_location[0] - self.current_pose_x[i]
+                goal_y_rel = self.current_goal_location[1] - self.current_pose_y[i]
+                
+                # Add goal position (relative to robot)
+                scans[i][velocities_index+2] = goal_x_rel
+                scans[i][velocities_index+3] = goal_y_rel
+            else:
+                # Default values if goal not set yet
+                scans[i][velocities_index+2] = 0.0
+                scans[i][velocities_index+3] = 0.0
+                
+        return scans
+        
+    def set_goal(self, goal_x, goal_y):
+        """Set a new goal location for the robots.
+        
+        Args:
+            goal_x: X-coordinate for the goal
+            goal_y: Y-coordinate for the goal
+        """
+        self.current_goal_location = [goal_x, goal_y]
+        # If in simulation, move the visual goal marker
+        try:
+            self.restart_environment.move_goal_to_position(goal_x, goal_y)
+            self.logger.log(f"Goal moved to ({goal_x}, {goal_y})")
+        except Exception as e:
+            self.logger.log(f"Warning: Could not move goal marker: {e}")
     
     def end_of_episode_functions(self, robot_scans):
         # Quickly update position variables of robots then reset velocities

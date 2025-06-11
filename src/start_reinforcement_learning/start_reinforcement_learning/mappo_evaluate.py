@@ -28,6 +28,10 @@ class MAPPOEvaluateNode(Node):
         map_number = self.declare_parameter('map_number', 1).get_parameter_value().integer_value
         robot_number = self.declare_parameter('robot_number', 3).get_parameter_value().integer_value
         model_episode = self.declare_parameter('model_episode', 0).get_parameter_value().integer_value
+        
+        # Add parameters for goal position
+        goal_x = self.declare_parameter('goal_x', -999.0).get_parameter_value().double_value
+        goal_y = self.declare_parameter('goal_y', -999.0).get_parameter_value().double_value
 
         self.get_logger().info(f"Evaluation Mode - Map number: {map_number}")
         self.get_logger().info(f"Evaluation Mode - Robot number: {robot_number}")
@@ -35,6 +39,13 @@ class MAPPOEvaluateNode(Node):
         # Set environment with action size
         env = Env(robot_number, map_number)
         n_agents = env.number_of_robots
+        
+        # Set custom goal position if provided
+        if goal_x > -999.0 and goal_y > -999.0:
+            self.get_logger().info(f"Using custom goal position: ({goal_x}, {goal_y})")
+            env.set_goal(goal_x, goal_y)
+        else:
+            self.get_logger().info("Using default goal position from environment")
         
         actor_dims = env.observation_space()
         critic_dims = sum(actor_dims)

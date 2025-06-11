@@ -23,6 +23,13 @@ class MAPPO:
         self.value_coef = value_coef
         self.update_epochs = 4  # Number of epochs to update policy per batch
         
+        # Add learning rate scheduling parameters
+        self.initial_alpha = alpha
+        self.initial_beta = beta
+        self.lr_decay_rate = 0.9999  # Rate at which learning rate decreases per episode
+        self.min_lr = 1e-5  # Minimum learning rate
+        self.current_episode = 0  # Track episode count for LR scheduling
+        
         # Path now includes map and robot numbers from mappo_main.py
         
         for agent_idx in range(self.n_agents):
@@ -107,13 +114,24 @@ class MAPPO:
     def learn(self, memory):
         # If memory doesn't have enough data, return
         if not memory.ready():
-            return
+            return [], [], []
         
+        # Update episode count for learning rate scheduling
+        self.current_episode += 1
+        
+        # Update learning rates using exponential decay
+        self.update_learning_rates()
+            
         # Sample batch from memory
         batch_data = memory.sample_buffer()
         if batch_data is None:
-            return
+            return [], [], []
             
+        # Collect losses for each agent
+        policy_losses = []
+        value_losses = []
+        entropy_losses = []
+        
         # Update each agent
         for agent_idx, agent in enumerate(self.agents):
             # Get data for this agent
@@ -143,18 +161,40 @@ class MAPPO:
             advantages = batch_data['advantages'][:, agent_idx]
             returns = batch_data['returns'][:, agent_idx]
             
+            # Track losses for this agent across epochs
+            agent_policy_loss = 0
+            agent_value_loss = 0
+            agent_entropy_loss = 0
+            
             # Multiple epochs of updates (typical in PPO)
             for _ in range(self.update_epochs):
                 # Update agent networks
                 policy_loss, value_loss, entropy_loss = agent.update(
                     individual_states, global_states, actions, old_log_probs, advantages, returns
                 )
+                
+                # Accumulate losses
+                agent_policy_loss += policy_loss
+                agent_value_loss += value_loss
+                agent_entropy_loss += entropy_loss
+            
+            # Average losses over epochs
+            agent_policy_loss /= self.update_epochs
+            agent_value_loss /= self.update_epochs
+            agent_entropy_loss /= self.update_epochs
+            
+            # Store average losses for this agent
+            policy_losses.append(agent_policy_loss)
+            value_losses.append(agent_value_loss)
+            entropy_losses.append(agent_entropy_loss)
             
             if self.logger:
                 self.logger.get_logger().info(
-                    f"Agent {agent_idx} - Policy Loss: {policy_loss:.4f}, Value Loss: {value_loss:.4f}, Entropy: {entropy_loss:.4f}"
+                    f"Agent {agent_idx} - Policy Loss: {agent_policy_loss:.4f}, Value Loss: {agent_value_loss:.4f}, Entropy: {agent_entropy_loss:.4f}"
                 )
-                
+        
+        return policy_losses, value_losses, entropy_losses
+
     def get_lr(self):
         """
         Get the current learning rate of the agents.
@@ -171,3 +211,27 @@ class MAPPO:
             return self.agents[0].actor.optimizer.param_groups[0]['lr']
         except (IndexError, AttributeError):
             return 0.0
+            
+    def update_learning_rates(self):
+        """
+        Update learning rates for all agents using exponential decay schedule.
+        Learning rate will decay over time but never go below min_lr.
+        """
+        if self.current_episode % 10 != 0:  # Only update every 10 episodes for efficiency
+            return
+            
+        # Calculate new learning rates
+        factor = self.lr_decay_rate ** self.current_episode
+        new_alpha = max(self.min_lr, self.initial_alpha * factor)
+        new_beta = max(self.min_lr, self.initial_beta * factor)
+        
+        # Apply new learning rates to all agents
+        for agent in self.agents:
+            for param_group in agent.actor.optimizer.param_groups:
+                param_group['lr'] = new_alpha
+                
+            for param_group in agent.critic.optimizer.param_groups:
+                param_group['lr'] = new_beta
+                
+        if self.current_episode % 50 == 0 and self.logger:
+            self.logger.get_logger().info(f"Updated learning rates - Actor: {new_alpha:.6f}, Critic: {new_beta:.6f}")

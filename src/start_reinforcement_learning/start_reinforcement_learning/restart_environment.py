@@ -159,6 +159,32 @@ class RestartEnvironment():
         spawn_goal.send_request(spawn_request)
         return (self.current_goal_pose.position.x, self.current_goal_pose.position.y)
     
+    # Move goal to a specific position
+    def move_goal_to_position(self, x, y, z=0.0):
+        """Move the goal entity to a specific position.
+        
+        Args:
+            x: X-coordinate for the goal
+            y: Y-coordinate for the goal
+            z: Z-coordinate for the goal (default: 0.0)
+            
+        Returns:
+            tuple: (x, y) coordinates of the new goal position
+        """
+        # Access the node that moves goal
+        set_goal = self.set_model_pose
+        
+        # Create a new pose at the specified position
+        new_pose = Pose(position=Point(x=float(x), y=float(y), z=float(z)))
+        self.current_goal_pose = new_pose
+        
+        # Send the request to move the goal
+        name = 'goal_box'
+        set_goal.get_logger().info(f'%%%%%%%%% Moving Goal to ({x}, {y}) %%%%%%%%%')
+        set_goal.send_request(name, new_pose)
+        
+        return (x, y)
+    
     # Not currently used
     def delete_goal(self):
         delete_goal = Delete_Entity()

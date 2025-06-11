@@ -51,6 +51,9 @@ ros2 launch start_rl_environment main.launch.py map_number:=1 robot_number:=2 he
 ./speed_train.sh --headless=false
 
 
+./speed_train.sh --map=1 --robots=2 --algorithm=mappo --headless=false --fast=true --speed=quality
+ros2 launch start_reinforcement_learning evaluate_mappo.launch.py map_number:=1 robot_number:=3 goal_x:=1.5 goal_y:=-5.0
+
 # AVAILABLE ARGUMENTS
 
 # Environment arguments:
